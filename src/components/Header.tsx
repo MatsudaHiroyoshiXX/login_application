@@ -15,6 +15,9 @@ const HeaderContainer = styled.div`
 const Title = styled.h1`
   font-size: 24px;
 `;
+const Title2 = styled.h1`
+  font-size: 24px;
+`;
 
 const UserImage = styled.img`
   height: 40px; // 画像の高さを調整
