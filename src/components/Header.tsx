@@ -18,9 +18,7 @@ const Title = styled.h1`
 const Title2 = styled.h1`
   font-size: 24px;
 `;
-const Title3 = styled.h1`
-  font-size: 24px;
-`;
+
 
 const UserImage = styled.img`
   height: 40px; // 画像の高さを調整
