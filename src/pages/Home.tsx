@@ -5,6 +5,7 @@ import { signInWithPopup, signOut } from 'firebase/auth';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import UserInfo from '../components/UserInfo'
 import Header from '../components/Header'
+import CustomerList from './CustomerList'
 
 
 const signInWithGoogle = () => {
@@ -40,22 +41,25 @@ function Home() {
 
   return (
     <>
-    <Header />
     {user ? (
       <>
-        <UserInfo user={user} />
+      <Header onSignOut={signOutUser}/>
+        {/* <UserInfo user={user} /> */}
+        <CustomerList />
         <ButtonContainer>
-        <SignUpButton onClick={signOutUser}>ログアウト</SignUpButton>
+        {/* <SignUpButton onClick={signOutUser}>ログアウト</SignUpButton> */}
     </ButtonContainer>
       </>
     ) : (
+      <>
+      <Header />
       <LoginContainer>
         <LoginBox>
         <Title>ログインへ進む</Title>
         <SignInButton onClick={signInWithGoogle}>Googleでサインイン</SignInButton>
         </LoginBox>
       </LoginContainer>
-
+      </>
     )}
     <ButtonContainer>
     </ButtonContainer>

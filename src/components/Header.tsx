@@ -2,40 +2,62 @@ import React from 'react';
 import styled from 'styled-components';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../firebase_settings/firebase';
-import UserInfo from './UserInfo';
 
 const HeaderContainer = styled.div`
   display: flex;
   justify-content: space-between;
+  align-items: center; // アイテムを中央揃えにする
   padding: 10px 20px;
   background-color: #f4f4f4;
-  border-bottom: 1px solid rgba(128, 128, 128, 0.3); /* 半透明のグレー */
-  `;
+  border-bottom: 1px solid rgba(128, 128, 128, 0.3);
+`;
 
 const Title = styled.h1`
   font-size: 24px;
 `;
-const Title2 = styled.h1`
-  font-size: 24px;
-`;
-const Title3 = styled.h1`
-  font-size: 24px;
-`;
 
+const UserActions = styled.div`
+  display: flex;
+  align-items: center; // アイテムを中央揃えにする
+`;
 
 const UserImage = styled.img`
-  height: 40px; // 画像の高さを調整
-  width: 40px; // 画像の幅を調整
-  border-radius: 20px; // 丸い形状にする
+  height: 40px;
+  width: 40px;
+  border-radius: 20px;
+  margin-left: 15px; // ログアウトボタンとの間隔を開ける
 `;
 
-const Header = () => {
+const LogoutButton = styled.button`
+  padding: 10px 20px;
+  margin: 0;
+  font-size: 14px;
+  font-weight: bold;
+  border-radius: 50px;
+  border: none;
+  background-color: #f4f4f4; // ボタンの背景色を設定
+  color: #656D76; // ボタンのテキスト色を白に設定
+  cursor: pointer; // ホバー時にカーソルをポインターに設定
+  border: 1px solid rgba(128, 128, 128, 0.3);
+
+`;
+
+interface HeaderProps {
+  onSignOut?: () => void;
+}
+
+const Header: React.FC<HeaderProps> = ({ onSignOut }) => {
   const [user] = useAuthState(auth);
 
   return (
     <HeaderContainer>
       <Title>顧客管理システム</Title>
-      {user && <UserImage src={auth.currentUser?.photoURL ?? undefined} alt="User" />}
+      {user && (
+        <UserActions>
+          <LogoutButton onClick={onSignOut}>ログアウト</LogoutButton>
+          <UserImage src={auth.currentUser?.photoURL ?? undefined} alt="User" />
+        </UserActions>
+      )}
     </HeaderContainer>
   );
 };
