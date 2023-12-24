@@ -6,7 +6,7 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import UserInfo from '../components/UserInfo'
 import Header from '../components/Header'
 
-
+//テスト
 const signInWithGoogle = () => {
   signInWithPopup(auth, provider)
     .then((result) => {
