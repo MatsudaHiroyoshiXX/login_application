@@ -6,6 +6,7 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import UserInfo from '../components/UserInfo'
 import Header from '../components/Header'
 import CustomerList from './CustomerList'
+import CustomerPage from './CustomerPage'
 
 
 const signInWithGoogle = () => {
@@ -49,6 +50,7 @@ function Home() {
         <ButtonContainer>
         {/* <SignUpButton onClick={signOutUser}>ログアウト</SignUpButton> */}
     </ButtonContainer>
+    <CustomerPage/>
       </>
     ) : (
       <>
