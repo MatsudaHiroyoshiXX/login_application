@@ -6,6 +6,7 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import UserInfo from '../components/UserInfo'
 import Header from '../components/Header'
 import CustomerList from './CustomerList'
+import CustomerPage from './CustomerPage';
 
 
 const signInWithGoogle = () => {
@@ -43,12 +44,13 @@ function Home() {
     <>
     {user ? (
       <>
-      <Header onSignOut={signOutUser}/>
-        {/* <UserInfo user={user} /> */}
-        <CustomerList />
-        <ButtonContainer>
-        {/* <SignUpButton onClick={signOutUser}>ログアウト</SignUpButton> */}
-    </ButtonContainer>
+          <Header onSignOut={signOutUser} />
+          {/* <UserInfo user={user} /> */}
+          <CustomerList />
+          <ButtonContainer>
+            {/* <SignUpButton onClick={signOutUser}>ログアウト</SignUpButton> */}
+          </ButtonContainer>
+        <CustomerPage />
       </>
     ) : (
       <>
