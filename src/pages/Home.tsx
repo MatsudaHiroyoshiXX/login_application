@@ -44,7 +44,7 @@ function Home() {
     <>
     {user ? (
       <>
-          <Header onSignOut={signOutUser} />
+          <Header onSignOut={signOutUser}/>
           {/* <UserInfo user={user} /> */}
           <CustomerList />
           <ButtonContainer>

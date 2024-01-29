@@ -4,20 +4,12 @@ import styled from 'styled-components';
 
 const CustomerPage = () => {
   const [buttonText, setButtonText] = useState('編集');
-  const [aaa, setAaa] = useState(true);
   const toggleButton = () => {
     setButtonText((prevText) => (prevText === '編集' ? '保存' : '編集'));
-  };
-  const toggleAaa = () => {
-    setAaa(false)
-    console.log('文字列でクリック')
-    console.log(aaa)
-
   };
 
   return (
     <Root>
-        <button onClick={toggleAaa}></button>
         <PageTitle>お客様詳細情報</PageTitle>
         <ProfileContainer>
           <Content>
@@ -133,7 +125,7 @@ const CustomerPage = () => {
                   <TableHeader>対応状況</TableHeader>
                   <TableHeader>決済方法</TableHeader>
                   <TableHeader>合計</TableHeader>
-                  <TableHeader>操作 <button onClick={toggleButton}>{buttonText}</button></TableHeader>
+                  <TableHeader>操作</TableHeader>
                 </TableRow>
               </thead>
               <tbody>
@@ -145,7 +137,7 @@ const CustomerPage = () => {
                   <TableData>{row.situ}</TableData>
                   <TableData>{row.set}</TableData>
                   <TableData>{row.total}</TableData>
-                  <TableData>{row.ope}</TableData>
+                  <TableData>{row.ope} <button onClick={toggleButton}>{buttonText}</button></TableData>
                 </TableRow>
                 ))}
               </tbody>
@@ -167,23 +159,22 @@ const PageTitle = styled.h1`
 `
 const ProfileContainer = styled.div`
   width:890px;
-  margin:50px 0px 0px 0px;
+  margin-top:70px;
 `
 const ProfileContent = styled.div`
   display:flex;
-  margin-top:-30px
 `
 const UserName = styled.p`
   font-size: 24px;
   font-weight: 400;
+  margin:0;
 `
 const UserAge = styled.p`
-  margin:30px 0px 0px 0px;
-  
+  margin:0;
+  padding-top:5px;
 `
 const ProfileList = styled.div`
   display:flex;
-  margin:-30px 0px 0px 0px;
 `
 const ProfileItem = styled.div`
   display:flex;
@@ -192,25 +183,29 @@ const ProfileItem = styled.div`
 const ItemTitle = styled.h3`
   font-size: 14px;
   padding-right: 10px;
+  margin:0;
 `
 const ItemValue = styled.p`
   font-size: 14px;
   padding-right: 50px;
+  margin:0;
 `
 const ProfileInformation = styled.h3`
   font-size: 16px;
-  margin-top:-5px;
+  padding: 10px 0px;
+  margin:10px 0px 0px 0px;
 `
 const ProfileContact = styled.div`
   display:flex;
-  margin:-25px 0px -10px 0px;
 `
 const ContactTitle = styled.h3`
   font-size: 14px;
+  margin:0;
 `
 const ContactValue = styled.p`
   font-size: 14px;
   padding-top:2px;
+  margin:0;
 `
 
 const StatusContainer = styled.div`
@@ -229,18 +224,18 @@ const ContentMain = styled.div`
 const ContentLeft = styled.div`
   display:flex;
   flex-direction: column;
+  gap:20px;
 `
 const StatusList = styled.div`
-
 `
 const StatusItem = styled.p`
   color:#717171;
   font-size: 16px;
-  margin-top:0px;
+  margin:0;
 `
 const StatusValue = styled.p`
   font-size: 24px;
-  margin-top:-5px;
+  margin:0;
 `
 const ImageContainer = styled.div`
   margin:0 0 0 auto;
@@ -251,10 +246,9 @@ const CarImage = styled.img`
 `
 const UrlList = styled.div`
   display:flex;
-  margin-left:120px;
 `
 const UrlItem = styled.p`
-  margin-top:0px;
+  margin:0 0 0 auto;
 `
 const UrlValue = styled.a`
   margin-top:2px;
@@ -271,11 +265,10 @@ const StatusRight = styled.div`
 `
 const MessageBox = styled.div`
   background-color:#DEDEDE;
-  margin:0px 0px 377px 0px;
+  margin:0px 0px 321px 0px;
   padding:5px 20px;
 `
 const MessageList = styled.div`
-
 `
 const MessageItem = styled.p`
   font-size: 16px;
@@ -285,7 +278,7 @@ const MessageValue = styled.p`
 
 const TitleText = styled.h2`
   font-size:20px;
-  margin-left:10px;
+  margin:15px 10px;
 `
 
 const Content = styled.div`
@@ -301,33 +294,30 @@ const HistoryContainer = styled.div`
 const HistoryTable = styled.table`
   width: 100%;
   border-collapse: collapse;
-  margin-top:-10px;
-  table-layout:fixed;
 `
 const TableRow = styled.tr`
-  
 `
 const TableHeader = styled.th`
   background-color: #f2f2f2;
   text-align: left;
   border:solid;
   padding:5px 30px; 
+  text-align: center;
 `
 const tableData = [
-  { no: 1, number: 12345, date: '2000/12/12', situ: '注文済み', set: 'クレジットカード', total: '100,000円', ope: '詳細', },
-  { no: 2, number: 12345, date: '2000/12/12', situ: '注文済み', set: '現金', total: '100,000円', ope: '詳細', },
-  { no: 3, number: 12345, date: '2000/12/12', situ: '注文済み', set: 'クレジットカード', total: '100,000円', ope: '詳細', },
-  { no: 4, number: 12345, date: '2000/12/12', situ: '注文済み', set: 'クレジットカード', total: '100,000円', ope: '詳細', },
-  { no: 5, number: 12345, date: '2000/12/12', situ: '注文済み', set: 'クレジットカード', total: '100,000円', ope: '詳細', },
+  { no: 1, number: 12345, date: '2023/2/15', situ: '注文済み', set: 'クレジットカード', total: '160,000円', ope: '詳細 / ', },
+  { no: 2, number: 67890, date: '2023/5/17', situ: '注文済み', set: '現金', total: '150,000円', ope: '詳細 / ', },
+  { no: 3, number: 37689, date: '2023/7/30', situ: '注文済み', set: 'クレジットカード', total: '250,000円', ope: '詳細 / ', },
+  { no: 4, number: 49687, date: '2023/10/26', situ: '注文済み', set: 'クレジットカード', total: '180,000円', ope: '詳細 / ', },
+  { no: 5, number: 19475, date: '2023/12/12', situ: '注文済み', set: '現金', total: '75,000円', ope: '詳細 / ', },
 ];
 
 const TableData = styled.td`
-  border: 1px solid #ddd;
   border:solid;
   padding:5px 30px;
-  /* width: calc(100%/7); */
+  text-align: center;
   &:first-child{
-    width:50px;
+    width:30px;
   }
 `
 
