@@ -1,10 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
+import { BrowserRouter as Router, Routes, Route,  } from 'react-router-dom';
 import { auth, provider } from '../firebase_settings/firebase'; // Firebaseの設定をインポート
 import { signInWithPopup, signOut } from 'firebase/auth';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import UserInfo from '../components/UserInfo'
-import Header from '../components/Header'
+import UserInfo from '../components/UserInfo';
+import Header from '../components/Header';
+import CustomerList from './CustomerList';
+import CustomerPage from './CustomerPage';
 
 
 const signInWithGoogle = () => {
@@ -34,19 +37,51 @@ function Home() {
   // ログイン認証状況の状態管理
   const [ user, loading ] = useAuthState(auth);
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+  // if (loading) {
+  //   return <div>Loading...</div>;
+  // }
 
   return (
     <>
     <Header />
-    {user ? (
+    <Router>
+      <Routes> 
+        <Route
+          path="/"
+          element={
+            loading ? (
+              <div>Loading...</div>
+            ) : user ? (
+              <>
+                <UserInfo user={user} />
+                <CustomerList/>
+                <ButtonContainer>
+                <SignUpButton onClick={signOutUser}>ログアウト</SignUpButton>
+                </ButtonContainer>
+              </>
+            ) : (
+              <LoginContainer>
+                <LoginBox>
+                <Title>ログインへ進む</Title>
+                <SignInButton onClick={signInWithGoogle}>Googleでサインイン</SignInButton>
+                </LoginBox>
+              </LoginContainer>
+            )
+          }
+        />
+        <Route 
+        path='/CustomerPage/:idNumber' 
+        element={<CustomerPage/>}
+        />
+      </Routes>
+    </Router>
+
+    {/* {user ? (
       <>
         <UserInfo user={user} />
         <ButtonContainer>
         <SignUpButton onClick={signOutUser}>ログアウト</SignUpButton>
-    </ButtonContainer>
+        </ButtonContainer>
       </>
     ) : (
       <LoginContainer>
@@ -56,7 +91,7 @@ function Home() {
         </LoginBox>
       </LoginContainer>
 
-    )}
+    )} */}
     <ButtonContainer>
     </ButtonContainer>
     </>
