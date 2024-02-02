@@ -315,11 +315,11 @@ const CustomerList = () => {
               </TableCell>
               <TableCell>動画URL</TableCell>
               <TableCell 
-            onMouseEnter={() => setHoveredColumn('updateDate')}
-            onMouseLeave={() => setHoveredColumn(null)}
-            >更新日
-                          <SortIcons isHovered={hoveredColumn === 'updateDate'} handleSort={() => handleSort('updateDate')} />
-            </TableCell>
+              onMouseEnter={() => setHoveredColumn('updateDate')}
+              onMouseLeave={() => setHoveredColumn(null)}
+              >更新日
+              <SortIcons isHovered={hoveredColumn === 'updateDate'} handleSort={() => handleSort('updateDate')} />
+              </TableCell>
               <TableCell>詳細＆動画編集</TableCell>
             </TableRow>
           </TableHead>

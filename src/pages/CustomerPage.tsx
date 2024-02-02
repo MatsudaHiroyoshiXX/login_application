@@ -8,6 +8,14 @@ const CustomerPage = () => {
     setButtonText((prevText) => (prevText === '編集' ? '保存' : '編集'));
   };
 
+  const tableData = [
+    { no: 1, number: 12345, date: '2023/2/15', situ: '注文済み', set: 'クレジットカード', total: '160,000円', ope: '詳細 / ', },
+    { no: 2, number: 67890, date: '2023/5/17', situ: '注文済み', set: '現金', total: '150,000円', ope: '詳細 / ', },
+    { no: 3, number: 37689, date: '2023/7/30', situ: '注文済み', set: 'クレジットカード', total: '250,000円', ope: '詳細 / ', },
+    { no: 4, number: 49687, date: '2023/10/26', situ: '注文済み', set: 'クレジットカード', total: '180,000円', ope: '詳細 / ', },
+    { no: 5, number: 19475, date: '2023/12/12', situ: '注文済み', set: '現金', total: '75,000円', ope: '詳細 / ', },
+  ];
+
   return (
     <Root>
         <PageTitle>お客様詳細情報</PageTitle>
@@ -153,6 +161,8 @@ const CustomerPage = () => {
 const Root = styled.div`
   padding:50px;
   background-color:#DEDEDE;
+  max-width:1400px;
+  margin:auto;
 `
 const PageTitle = styled.h1`
   font-size:36px;
@@ -171,23 +181,25 @@ const UserName = styled.p`
 `
 const UserAge = styled.p`
   margin:0;
-  padding-top:5px;
+  display:flex;
+  align-items: flex-end;
 `
 const ProfileList = styled.div`
   display:flex;
+  gap:50px;
+  padding-top:5px;
 `
 const ProfileItem = styled.div`
   display:flex;
-  justify-content: space-between;
+  align-items: center;
+  gap:5px;
 `
 const ItemTitle = styled.h3`
   font-size: 14px;
-  padding-right: 10px;
   margin:0;
 `
 const ItemValue = styled.p`
   font-size: 14px;
-  padding-right: 50px;
   margin:0;
 `
 const ProfileInformation = styled.h3`
@@ -213,6 +225,7 @@ const StatusContainer = styled.div`
   grid-template-columns:2fr 1fr;
   gap:30px;
   margin-top:70px;
+  justify-content:space-between;
 `
 const StatusLeft = styled.div`
   height:auto;
@@ -262,7 +275,7 @@ const TextBox = styled.div`
 
 const StatusRight = styled.div`
   height:auto;
-`
+  `
 const MessageBox = styled.div`
   background-color:#DEDEDE;
   margin:0px 0px 321px 0px;
@@ -289,7 +302,7 @@ const Content = styled.div`
 `
 const HistoryContainer = styled.div`
   margin-top:70px;
-  width:100%;
+  
 `
 const HistoryTable = styled.table`
   width: 100%;
@@ -300,20 +313,13 @@ const TableRow = styled.tr`
 const TableHeader = styled.th`
   background-color: #f2f2f2;
   text-align: left;
-  border:solid;
+  border: 1px solid #000000;
   padding:5px 30px; 
   text-align: center;
 `
-const tableData = [
-  { no: 1, number: 12345, date: '2023/2/15', situ: '注文済み', set: 'クレジットカード', total: '160,000円', ope: '詳細 / ', },
-  { no: 2, number: 67890, date: '2023/5/17', situ: '注文済み', set: '現金', total: '150,000円', ope: '詳細 / ', },
-  { no: 3, number: 37689, date: '2023/7/30', situ: '注文済み', set: 'クレジットカード', total: '250,000円', ope: '詳細 / ', },
-  { no: 4, number: 49687, date: '2023/10/26', situ: '注文済み', set: 'クレジットカード', total: '180,000円', ope: '詳細 / ', },
-  { no: 5, number: 19475, date: '2023/12/12', situ: '注文済み', set: '現金', total: '75,000円', ope: '詳細 / ', },
-];
 
 const TableData = styled.td`
-  border:solid;
+  border: 1px solid #000000;
   padding:5px 30px;
   text-align: center;
   &:first-child{
