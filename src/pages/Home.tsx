@@ -7,7 +7,7 @@ import UserInfo from '../components/UserInfo'
 import Header from '../components/Header'
 import CustomerList from './CustomerList'
 import CustomerPage from './CustomerPage';
-
+import CustomerListMap from'./CustomerListMap'
 
 const signInWithGoogle = () => {
   signInWithPopup(auth, provider)
@@ -51,6 +51,7 @@ function Home() {
             {/* <SignUpButton onClick={signOutUser}>ログアウト</SignUpButton> */}
           </ButtonContainer>
         <CustomerPage />
+        <CustomerListMap/>
       </>
     ) : (
       <>
