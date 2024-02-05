@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { collection, getDocs , getFirestore, query, orderBy, onSnapshot, doc, Timestamp } from 'firebase/firestore';
 import { auth } from '../firebase_settings/firebase';
-import { db } from '../firebase_settings/firebase'
+// import { db } from '../firebase_settings/firebase';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
@@ -20,6 +20,8 @@ import styled from '@emotion/styled';
 // import Pagination from './Pagination';
 // import upArrow from '../img/UpArrow.png';
 // import downArrow from '../img/DownArrow.png';
+import { useNavigate } from 'react-router-dom';
+import CustomerListMap from './CustomerListMap';
 
 interface SortIconProps {
     isHovered: boolean;
@@ -83,50 +85,51 @@ const SearchButton = styled(Button)({
 });
 
 // ソートアイコンのコンポーネント
-const SortIcons: React.FC<SortIconProps> = ({ isHovered, handleSort }) => (
-  isHovered ? (
-    <div style={{ display: 'inline-block', verticalAlign: 'middle' }}>
-      <img 
-        src="/img/UpArrow.png" 
-        alt="Up Arrow" 
-        style={{ cursor: 'pointer', display: 'block', width: 'auto', height: '7.54px' }}
-        onClick={handleSort}
-      />
-      <img 
-        src="/img/DownArrow.png" 
-        alt="Down Arrow" 
-        style={{ cursor: 'pointer', display: 'block', width: 'auto', height: '7.54px' }}
-        onClick={handleSort}
-      />
-    </div>
-  ) : null
-);
+// const SortIcons: React.FC<SortIconProps> = ({ isHovered, handleSort }) => (
+//   isHovered ? (
+//     <div style={{ display: 'inline-block', verticalAlign: 'middle' }}>
+//       <img 
+//         src="/img/UpArrow.png" 
+//         alt="Up Arrow" 
+//         style={{ cursor: 'pointer', display: 'block', width: 'auto', height: '7.54px' }}
+//         onClick={handleSort}
+//       />
+//       <img 
+//         src="/img/DownArrow.png" 
+//         alt="Down Arrow" 
+//         style={{ cursor: 'pointer', display: 'block', width: 'auto', height: '7.54px' }}
+//         onClick={handleSort}
+//       />
+//     </div>
+//   ) : null
+// );
 
   // ダミーデータを新しい項目に合わせて変更します
-  const customers = [
-    { 
-      name: '山田 太郎', 
-      carNumber: '東京 200 は 2019',
-      inspectionExpiryDate: '2023/04/01',
-      currentCar: 'プリウスUグレード',
-      proposedCar: 'アルファードXグレード',
-      videoUrl: 'http://example.com/video/a',
-      updateDate: '2023/01/01'
-    },
-    { 
-      name: '鈴木 花子', 
-      carNumber: '神奈川 300 さ 2020',
-      inspectionExpiryDate: '2023/05/01',
-      currentCar: 'フィットLグレード',
-      proposedCar: 'シビックSグレード',
-      videoUrl: 'http://example.com/video/b',
-      updateDate: '2023/02/01'
-    },
+  // const customers = [  
+  //   { 
+  //     name: '山田 太郎', 
+  //     carNumber: '東京 200 は 2019',
+  //     inspectionExpiryDate: '2023/04/01',
+  //     currentCar: 'プリウスUグレード',
+  //     proposedCar: 'アルファードXグレード',
+  //     videoUrl: 'http://example.com/video/a',
+  //     updateDate: '2023/01/01'
+  //   },
+  //   { 
+  //     name: '鈴木 花子', 
+  //     carNumber: '神奈川 300 さ 2020',
+  //     inspectionExpiryDate: '2023/05/01',
+  //     currentCar: 'フィットLグレード',
+  //     proposedCar: 'シビックSグレード',
+  //     videoUrl: 'http://example.com/video/b',
+  //     updateDate: '2023/02/01'
+  //   },
 
-  ];
+  // ];
 const firestore = getFirestore();
 
 interface Post {
+    idNumber: number;
     id: string;
     text: string;
     timestamp: Timestamp;
@@ -140,111 +143,140 @@ interface Post {
     videoUrl: string; // 動画URL
     updateDate: string; // 更新日
   }
-const CustomerList = () => {
-  const [customers, setCustomers] = useState<Customer[]>([]);
-  const [posts, setPosts ] = useState<Post[]>([]);
-
-  const [sortField, setSortField] = useState<null | string>(null);
-  const [sortDirection, setSortDirection] = useState('default');  // 'asc', 'desc', 'default'
-  const [sortedCustomers, setSortedCustomers] = useState([...customers]);
-  const [hoveredColumn, setHoveredColumn] = useState<null | string>(null);
-  const [searchTerm, setSearchTerm] = useState('');  // 検索キーワードを管理するstate
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
-  // 現在のページに表示する顧客を計算
-  const indexOfLastCustomer = currentPage * itemsPerPage;
-  const indexOfFirstCustomer = indexOfLastCustomer - itemsPerPage;
-  const [displayedCustomers, setDisplayedCustomers] = useState<Customer[]>([]); // ソートや検索に使う
-  const [currentCustomers, setCurrentCustomers] = useState<Customer[]>([]); // ページネーションに使う
-
-    // 検索処理
-    const handleSearch = () => {
-      const terms = searchTerm.split(/\s+/).filter(Boolean);  // スペースでキーワードを分割
-      const filtered = sortedCustomers.filter(customer => {
-        return terms.every(term => 
-          Object.values(customer).some(value => 
-            String(value).includes(term)
-          )
-        );
-      });
-      setDisplayedCustomers(filtered);
-    };
-
-  const handleSort = (field: string) => {
-    let direction = '';
-    
-    if (sortField !== field) {
-      direction = 'asc';
-    } else {
-      switch (sortDirection) {
-        case 'default':
-          direction = 'asc';
-          break;
-        case 'asc':
-          direction = 'desc';
-          break;
-        case 'desc':
-          direction = 'default';
-          break;
-        default:
-          direction = 'default';
-      }
-    }
-    
-    setSortField(field);
-    setSortDirection(direction);
   
-    let sortedData = [];
-    if (direction === 'default') {
-      sortedData = [...customers];
-    } else {
-      const collator = new Intl.Collator('ja', { numeric: true });
-      sortedData = [...sortedCustomers].sort((a, b) => {
-        return collator.compare(a[field], b[field]) * (direction === 'asc' ? 1 : -1);
-      });
-    }
-    setSortedCustomers(sortedData);
-    setDisplayedCustomers(sortedData);
+const CustomerList = () => {
+  const navigate = useNavigate();
+
+  const handleButtonClick = (idNumber: number) => {
+    // ここで遷移先のパスを指定
+    navigate('/CustomerPage/${idNumber}');
   };
 
-  useEffect(() => {
-    const collator = new Intl.Collator('ja', { numeric: true });
-    const initialSortedData = [...customers].sort((a, b) => {
-      return collator.compare(a.name, b.name);
-    });
-    
-    setSortedCustomers(initialSortedData);
-    setDisplayedCustomers(initialSortedData);
-    setCurrentCustomers(initialSortedData.slice(indexOfFirstCustomer, indexOfLastCustomer));
-  }, []);
+  const [customers, setCustomers] = useState([
+    { 
+      idNumber: 1,
+      name: '山田 太郎', 
+      carNumber: '東京 200 は 2019',
+      inspectionExpiryDate: '2023/04/01',
+      currentCar: 'プリウスUグレード',
+      proposedCar: 'アルファードXグレード',
+      videoUrl: 'http://example.com/video/a',
+      updateDate: '2023/01/01'
+    },
+    { 
+      idNumber: 2,
+      name: '鈴木 花子', 
+      carNumber: '神奈川 300 さ 2020',
+      inspectionExpiryDate: '2023/05/01',
+      currentCar: 'フィットLグレード',
+      proposedCar: 'シビックSグレード',
+      videoUrl: 'http://example.com/video/b',
+      updateDate: '2023/02/01'
+    },
+  ]);
+  // const [posts, setPosts ] = useState<Post[]>([]);
 
-    // displayedCustomersが変更されたとき、またはcurrentPageが変更されたときにcurrentCustomersを更新
-    useEffect(() => {
-      const indexOfLastCustomer = currentPage * itemsPerPage;
-      const indexOfFirstCustomer = indexOfLastCustomer - itemsPerPage;
-      setCurrentCustomers(displayedCustomers.slice(indexOfFirstCustomer, indexOfLastCustomer));
-    }, [displayedCustomers, currentPage]);
+  // const [sortField, setSortField] = useState<null | string>(null);
+  // const [sortDirection, setSortDirection] = useState('default');  // 'asc', 'desc', 'default'
+  // const [sortedCustomers, setSortedCustomers] = useState([...customers]);
+  // const [hoveredColumn, setHoveredColumn] = useState<null | string>(null);
+  // const [searchTerm, setSearchTerm] = useState('');  // 検索キーワードを管理するstate
+  // const [currentPage, setCurrentPage] = useState(1);
+  // const itemsPerPage = 10;
+  // // 現在のページに表示する顧客を計算
+  // const indexOfLastCustomer = currentPage * itemsPerPage;
+  // const indexOfFirstCustomer = indexOfLastCustomer - itemsPerPage;
+  // const [displayedCustomers, setDisplayedCustomers] = useState<Customer[]>([]); // ソートや検索に使う
+  // const [currentCustomers, setCurrentCustomers] = useState<Customer[]>([]); // ページネーションに使う
+
+  //   // 検索処理
+  //   const handleSearch = () => {
+  //     const terms = searchTerm.split(/\s+/).filter(Boolean);  // スペースでキーワードを分割
+  //     const filtered = sortedCustomers.filter(customer => {
+  //       return terms.every(term => 
+  //         Object.values(customer).some(value => 
+  //           String(value).includes(term)
+  //         )
+  //       );
+  //     });
+  //     setDisplayedCustomers(filtered);
+  //   };
+
+  // const handleSort = (field: string) => {
+  //   let direction = '';
+    
+  //   if (sortField !== field) {
+  //     direction = 'asc';
+  //   } else {
+  //     switch (sortDirection) {
+  //       case 'default':
+  //         direction = 'asc';
+  //         break;
+  //       case 'asc':
+  //         direction = 'desc';
+  //         break;
+  //       case 'desc':
+  //         direction = 'default';
+  //         break;
+  //       default:
+  //         direction = 'default';
+  //     }
+  //   }
+    
+  //   setSortField(field);
+  //   setSortDirection(direction);
+  
+  //   let sortedData = [];
+  //   if (direction === 'default') {
+  //     sortedData = [...customers];
+  //   } else {
+  //     const collator = new Intl.Collator('ja', { numeric: true });
+  //     sortedData = [...sortedCustomers].sort((a, b) => {
+  //       return collator.compare(a[field], b[field]) * (direction === 'asc' ? 1 : -1);
+  //     });
+  //   }
+  //   setSortedCustomers(sortedData);
+  //   setDisplayedCustomers(sortedData);
+  // };
+
+  // useEffect(() => {
+  //   const collator = new Intl.Collator('ja', { numeric: true });
+  //   const initialSortedData = [...customers].sort((a, b) => {
+  //     return collator.compare(a.name, b.name);
+  //   });
+    
+  //   setSortedCustomers(initialSortedData);
+  //   setDisplayedCustomers(initialSortedData);
+  //   setCurrentCustomers(initialSortedData.slice(indexOfFirstCustomer, indexOfLastCustomer));
+  // }, []);
+
+  //   // displayedCustomersが変更されたとき、またはcurrentPageが変更されたときにcurrentCustomersを更新
+  //   useEffect(() => {
+  //     const indexOfLastCustomer = currentPage * itemsPerPage;
+  //     const indexOfFirstCustomer = indexOfLastCustomer - itemsPerPage;
+  //     setCurrentCustomers(displayedCustomers.slice(indexOfFirstCustomer, indexOfLastCustomer));
+  //   }, [displayedCustomers, currentPage]);
   
 
-  useEffect(() => {
-    const q = query(collection(firestore, "posts"), orderBy("timestamp", "desc"));
-    const postData = collection(db, "posts");
-    console.log(postData);
-    getDocs(postData).then((snapshot) => {
-        const snapData = snapshot.docs.map((doc) => ({ ...doc.data()}))
-        setPosts(snapData as Post[])
-    });
+  // useEffect(() => {
+  //   const q = query(collection(firestore, "posts"), orderBy("timestamp", "desc"));
+  //   const postData = collection(db, "posts");
+  //   console.log(postData);
+  //   getDocs(postData).then((snapshot) => {
+  //       const snapData = snapshot.docs.map((doc) => ({ ...doc.data()}))
+  //       setPosts(snapData as Post[])
+  //   });
 
-    const unsubscribe = onSnapshot(q, (querySnapshot) => {
-      const customerData = querySnapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      }));
-    //   setCustomers(customerData);
-    });
+  //   const unsubscribe = onSnapshot(q, (querySnapshot) => {
+  //     const customerData = querySnapshot.docs.map(doc => ({
+  //       id: doc.id,
+  //       ...doc.data()
+  //     }));
+  //   //   setCustomers(customerData);
+  //   });
 
-    return () => unsubscribe();
-  }, []);
+  //   return () => unsubscribe();
+  // }, []);
 
   return (
     // <div>
@@ -260,7 +292,7 @@ const CustomerList = () => {
     <Grid container justifyContent="center" alignItems="center">
     <Box p={4} width="100%">
       <h1>お客様情報一覧</h1>
-      <SearchBox>
+      {/* <SearchBox>
         <SearchTextField
           type="text"
           placeholder="検索キーワード"
@@ -284,68 +316,9 @@ const CustomerList = () => {
           onClick={handleSearch}
         >
         </SearchButton>
-      </SearchBox>
-      <Box mt={4}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell
-              onMouseEnter={() => setHoveredColumn('name')}
-              onMouseLeave={() => setHoveredColumn(null)}
-              >お名前
-              <SortIcons isHovered={hoveredColumn === 'name'} handleSort={() => handleSort('name')} />
-              </TableCell>
-              <TableCell
-              onMouseEnter={() => setHoveredColumn('carNumber')}
-              onMouseLeave={() => setHoveredColumn(null)}
-              >車両ナンバー
-              <SortIcons isHovered={hoveredColumn === 'carNumber'} handleSort={() => handleSort('carNumber')} />
-              </TableCell>
-              <TableCell
-              onMouseEnter={() => setHoveredColumn('inspectionExpiryDate')}
-              onMouseLeave={() => setHoveredColumn(null)}
-              >車検満了日
-              <SortIcons isHovered={hoveredColumn === 'inspectionExpiryDate'} handleSort={() => handleSort('inspectionExpiryDate')} />
-              </TableCell>
-              <TableCell
-              onMouseEnter={() => setHoveredColumn('currentCar')}
-              onMouseLeave={() => setHoveredColumn(null)}
-              >乗り換え提案
-              <SortIcons isHovered={hoveredColumn === 'currentCar'} handleSort={() => handleSort('currentCar')} />
-              </TableCell>
-              <TableCell>動画URL</TableCell>
-              <TableCell 
-              onMouseEnter={() => setHoveredColumn('updateDate')}
-              onMouseLeave={() => setHoveredColumn(null)}
-              >更新日
-              <SortIcons isHovered={hoveredColumn === 'updateDate'} handleSort={() => handleSort('updateDate')} />
-              </TableCell>
-              <TableCell>詳細＆動画編集</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-          {posts.map((customer, index) => (
-              <TableRow key={customer.customerNumber}>
-              <TableCell>{customer.name}</TableCell>
-              <TableCell>{customer.carNumber}</TableCell>
-              <TableCell>{customer.inspectionExpiryDate}</TableCell>
-              <TableCell>
-              {customer.currentCar} / {customer.proposedCar}
-              </TableCell>
-                <TableCell>
-                <IconButton><QrCodeIcon /></IconButton>
-                <a href={customer.videoUrl}>{customer.videoUrl}</a>
-                </TableCell>
-                <TableCell>{customer.updateDate}</TableCell>
-                <TableCell>
-                <IconButton><AccountCircleIcon /></IconButton>
-                  <IconButton><EditIcon /></IconButton>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </Box>
+      </SearchBox> */}
+      
+      <CustomerListMap/>
       {/* <Pagination 
   currentPage={currentPage}
   itemsPerPage={itemsPerPage}
@@ -356,7 +329,6 @@ const CustomerList = () => {
   </Grid>
   );
 };
-
 
 
 
