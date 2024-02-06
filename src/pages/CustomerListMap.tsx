@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import EditIcon from '@mui/icons-material/Edit';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import QrCodeIcon from '@mui/icons-material/QrCode';
+import UpArrow from '../img/UpArrow.png';
+import DownArrow from '../img/DownArrow.png';
 
 const CustomerListMap = () => {
   
@@ -11,7 +13,7 @@ const CustomerListMap = () => {
     };
     const [customers, setCustomers] = useState([
       { 
-        name: '山田 太郎', 
+        name: 'や山田 太郎', 
         carNumber: '東京 200 は 2019',
         inspectionExpiryDate: '2023/04/01',
         currentCar: 'プリウスUグレード',
@@ -20,7 +22,7 @@ const CustomerListMap = () => {
         updateDate: '2023/01/01'
       },
       { 
-        name: '鈴木 花子', 
+        name: 'す鈴木 花子', 
         carNumber: '神奈川 300 さ 2020',
         inspectionExpiryDate: '2023/05/01',
         currentCar: 'フィットLグレード',
@@ -29,7 +31,7 @@ const CustomerListMap = () => {
         updateDate: '2023/02/01'
       },
       { 
-        name: '佐藤 二郎', 
+        name: 'さ佐藤 二郎', 
         carNumber: 'さいたま 400 は 2021',
         inspectionExpiryDate: '2023/06/01',
         currentCar: 'エスティマPグレード',
@@ -38,7 +40,7 @@ const CustomerListMap = () => {
         updateDate: '2023/03/01'
       },
       { 
-        name: '北野 悠人', 
+        name: 'き北野 悠人', 
         carNumber: '旭川 500 は 2022',
         inspectionExpiryDate: '2023/07/01',
         currentCar: 'ヴェゼルRグレード',
@@ -47,7 +49,7 @@ const CustomerListMap = () => {
         updateDate: '2023/04/01'
       },
       { 
-        name: '寄谷 海斗', 
+        name: 'よ寄谷 海斗', 
         carNumber: '札幌 600 は 2023',
         inspectionExpiryDate: '2023/08/01',
         currentCar: 'ハリアーDグレード',
@@ -67,6 +69,27 @@ const CustomerListMap = () => {
       setIsHovered(false);
     };
     
+    const [sortOrder, setSortOrder] = useState('asc');
+
+    const handleSort = () => {
+      const sortedCustomers = [...customers].sort((a,b)=> {
+        if (sortOrder === 'asc') {
+          return a.name.localeCompare(b.name,'ja-JP');
+        } else {
+          return b.name.localeCompare(a.name,'ja-JP');
+        }
+      });
+
+      setCustomers(sortedCustomers);
+      setSortOrder((prevOrder) => (prevOrder === 'asc' ? 'desc' : 'asc'));
+    };
+
+    const ArrowImage = () => {
+      return <div onClick={handleSort} style={{position: 'absolute', right:0,top: '50%', transform: 'translateY(-50%)'}}>
+        <img src={UpArrow} alt="up" style={{ cursor: 'pointer', display: 'block', width: 'auto', height: '7.54px' }}/>
+        <img src={DownArrow} alt="down" style={{ cursor: 'pointer', display: 'block', width: 'auto', height: '7.54px', marginTop:5 }}/>
+      </div>
+    }
 
   return (
     <Root>
@@ -80,8 +103,8 @@ const CustomerListMap = () => {
         </SearchTextField>
 
         <SearchButton  
-        color="primary" 
-        onClick={handleSearch}
+          color="primary" 
+          onClick={handleSearch}
         >
         </SearchButton>
 
@@ -94,8 +117,7 @@ const CustomerListMap = () => {
             <TableHeader 
               onMouseEnter={handleMouseEnter}
               onMouseLeave={handleMouseLeave}
-              >
-                {isHovered && (<img src="img/UpArrow.png" alt="あ"/> )}
+              >{isHovered && (<ArrowImage/>)}
               お名前</TableHeader>
             <TableHeader>車両ナンバー</TableHeader>
             <TableHeader>車検満了日</TableHeader>
@@ -155,10 +177,6 @@ const TableHeader = styled.th`
   font-weight: 400;
   border-bottom: solid rgba(224, 224, 224, 1);
   position: relative;
-  >img{
-    position:absolute;
-    right:0;
-  }
 `
 const TableData = styled.td`
   padding:20px 20px;
