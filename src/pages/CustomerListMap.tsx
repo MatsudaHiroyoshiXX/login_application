@@ -28,7 +28,45 @@ const CustomerListMap = () => {
         videoUrl: 'http://example.com/video/b',
         updateDate: '2023/02/01'
       },
+      { 
+        name: '佐藤 二郎', 
+        carNumber: 'さいたま 400 は 2021',
+        inspectionExpiryDate: '2023/06/01',
+        currentCar: 'エスティマPグレード',
+        proposedCar: 'ハイエースHグレード',
+        videoUrl: 'http://example.com/video/a',
+        updateDate: '2023/03/01'
+      },
+      { 
+        name: '北野 悠人', 
+        carNumber: '旭川 500 は 2022',
+        inspectionExpiryDate: '2023/07/01',
+        currentCar: 'ヴェゼルRグレード',
+        proposedCar: 'オデッセイYグレード',
+        videoUrl: 'http://example.com/video/a',
+        updateDate: '2023/04/01'
+      },
+      { 
+        name: '寄谷 海斗', 
+        carNumber: '札幌 600 は 2023',
+        inspectionExpiryDate: '2023/08/01',
+        currentCar: 'ハリアーDグレード',
+        proposedCar: 'ヤリスGグレード',
+        videoUrl: 'http://example.com/video/a',
+        updateDate: '2023/05/01'
+      },
     ]);
+
+    const [isHovered, setIsHovered] = useState(false);
+    
+    const handleMouseEnter = () => {
+      setIsHovered(true);
+    };
+  
+    const handleMouseLeave = () => {
+      setIsHovered(false);
+    };
+    
 
   return (
     <Root>
@@ -53,7 +91,12 @@ const CustomerListMap = () => {
       <Table>
         <thead>
           <TableRow>
-            <TableHeader>お名前</TableHeader>
+            <TableHeader 
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
+              >
+                {isHovered && (<img src="img/UpArrow.png" alt="あ"/> )}
+              お名前</TableHeader>
             <TableHeader>車両ナンバー</TableHeader>
             <TableHeader>車検満了日</TableHeader>
             <TableHeader>乗り換え提案</TableHeader>
@@ -89,7 +132,7 @@ const CustomerListMap = () => {
 
 
 const Root = styled.div`
-  padding: 40px;
+  padding:20px;
 `
 const PageTitle = styled.h1`
 `
@@ -111,6 +154,11 @@ const TableHeader = styled.th`
   padding: 15px 20px;
   font-weight: 400;
   border-bottom: solid rgba(224, 224, 224, 1);
+  position: relative;
+  >img{
+    position:absolute;
+    right:0;
+  }
 `
 const TableData = styled.td`
   padding:20px 20px;
