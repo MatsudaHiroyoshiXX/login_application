@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import SearchIcon from '@mui/icons-material/Search';
 import EditIcon from '@mui/icons-material/Edit';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import QrCodeIcon from '@mui/icons-material/QrCode';
@@ -9,7 +10,9 @@ import DownArrow from '../img/DownArrow.png';
 const CustomerListMap = () => {
   
     const [searchTerm, setSearchTerm] = useState('');
+    
     const handleSearch = () => {
+      
     };
     const [customers, setCustomers] = useState([
       { 
@@ -99,13 +102,14 @@ const CustomerListMap = () => {
           type="text"
           placeholder="検索キーワード"
           value={searchTerm}
+          onChange={e => setSearchTerm(e.target.value)}
+          style={{ fontSize:'20px', padding:'20px'}}
         >
         </SearchTextField>
 
-        <SearchButton  
-          color="primary" 
-          onClick={handleSearch}
-        >
+        <SearchButton   
+          onClick={handleSearch}>
+          <StartIcon><SearchIcon/></StartIcon>
         </SearchButton>
 
       </SearchBox>
@@ -159,13 +163,41 @@ const Root = styled.div`
 const PageTitle = styled.h1`
 `
 const SearchBox = styled.div`
+  height: 57px;
+  position: relative; 
+  display: flex;
+  justify-content: center;
+  align-items: centers
 `
+
 const SearchTextField = styled.input`
+  width: 752px;
+  border: none;
+  outline: none;
+  border-bottom: solid rgba(224, 224, 224, 1);
 `
 const SearchButton = styled.button`
+  position: absolute;
+  transform: translateX(500%);
+  margin-top: -22px;
+  height: 44px;
+  width: 68px;
+  top:50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor:pointer;
+  background-color: #0000cd;
+  border-radius: 99px;
+  border: none;
+`
+const StartIcon = styled.div`
+  color: white;
+  position: absolute;
+  top:10px;
 `
 const Table = styled.table`
-  margin-top: 20px;
+  margin-top: 45px;
   width:100%;
   border-collapse:collapse;
 `
