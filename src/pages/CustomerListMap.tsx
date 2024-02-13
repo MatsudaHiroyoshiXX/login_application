@@ -77,11 +77,22 @@ const CustomerListMap = () => {
       },
     ]);
 
+    const [displayedCustomers, setDisplayedCustomers] = useState<Customer[]>(customers);
+
     const handleSearch = () => {
+      const terms = searchTerm.split(/\s+/).filter(Boolean);
+      const filtered = customers.filter(customer => {
+        return terms.every(term => 
+          Object.values(customer).some(value => 
+            String(value).includes(term)
+          )
+        );
+      });
+      setDisplayedCustomers(filtered);
     };
-    
+
     const handleSort = (sortBy: keyof Customer) => {
-      const sortedCustomers = [...customers].sort((a,b)=> {
+      const sortedCustomers = [...displayedCustomers].sort((a,b)=> {
         if (sortOrder === 'asc') {
           return a[sortBy].localeCompare(b[sortBy],'ja-JP');
         } else {
@@ -89,7 +100,7 @@ const CustomerListMap = () => {
         }
       });
 
-      setCustomers(sortedCustomers);
+      setDisplayedCustomers(sortedCustomers);
       setSortOrder((prevOrder) => (prevOrder === 'asc' ? 'desc' : 'asc'));
     };
 
@@ -111,6 +122,8 @@ const CustomerListMap = () => {
           placeholder="検索キーワード"
           value={searchTerm}
           onChange={e => setSearchTerm(e.target.value)}
+          maxLength={50
+} 
           style={{ fontSize:'20px', padding:'20px'}}
         >
         </SearchTextField>
@@ -167,7 +180,7 @@ const CustomerListMap = () => {
         </thead>
 
         <tbody>
-          {customers.map((row,index) => (
+          {displayedCustomers.map((row,index) => (
             <TableRow key={index}>
               <TableData>{row.name}</TableData>
               <TableData>{row.carNumber}</TableData>
@@ -203,7 +216,6 @@ const SearchBox = styled.div`
   position: relative; 
   display: flex;
   justify-content: space-between;
-  align-items: centers;
   border-bottom: solid rgba(224, 224, 224, 1);
 `
 
