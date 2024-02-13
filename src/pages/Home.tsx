@@ -43,7 +43,7 @@ function Home() {
 
   return (
     <>
-    <Header />
+    <Header signOutUser={signOutUser}/>
     <Router>
       <Routes> 
         <Route

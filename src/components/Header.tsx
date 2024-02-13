@@ -43,10 +43,10 @@ const LogoutButton = styled.button`
 `;
 
 interface HeaderProps {
-  onSignOut?: () => void;
+  signOutUser?: () => void;
 }
 
-const Header: React.FC<HeaderProps> = ({ onSignOut }) => {
+const Header: React.FC<HeaderProps> = ({ signOutUser }) => {
   const [user] = useAuthState(auth);
 
   return (
@@ -54,7 +54,7 @@ const Header: React.FC<HeaderProps> = ({ onSignOut }) => {
       <Title>顧客管理システム</Title>
       {user && (
         <UserActions>
-          <LogoutButton onClick={onSignOut}>ログアウト</LogoutButton>
+          <LogoutButton onClick={signOutUser}>ログアウト</LogoutButton>
           <UserImage src={auth.currentUser?.photoURL ?? undefined} alt="User" />
         </UserActions>
       )}
