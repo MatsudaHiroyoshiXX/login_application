@@ -6,6 +6,7 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import QrCodeIcon from '@mui/icons-material/QrCode';
 import UpArrow from '../img/UpArrow.png';
 import DownArrow from '../img/DownArrow.png';
+import { useNavigate } from 'react-router-dom';
 
 const CustomerListMap = () => {
   
@@ -28,6 +29,12 @@ const CustomerListMap = () => {
       updateDate: string; // 更新日
       [key: string]: string;
     }
+
+    const navigate = useNavigate();
+    const handleUserClick  = (name: string) => {
+      // ここで遷移先のパスを指定
+      navigate('/CustomerPage/${name}');
+    };
     
     const [customers, setCustomers] = useState<Customer[]>([
       { 
@@ -190,7 +197,7 @@ const CustomerListMap = () => {
         <tbody>
           {displayedCustomers.map((row,index) => (
             <TableRow key={index}>
-              <TableData>{row.name}</TableData>
+              <TableData onClick={() => handleUserClick(row.name)}>{row.name}</TableData>
               <TableData>{row.carNumber}</TableData>
               <TableData>{row.inspectionExpiryDate}</TableData>
               <TableData>{row.currentCar} / {row.proposedCar}</TableData>

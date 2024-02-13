@@ -37,65 +37,40 @@ function Home() {
   // ログイン認証状況の状態管理
   const [ user, loading ] = useAuthState(auth);
 
-  // if (loading) {
-  //   return <div>Loading...</div>;
-  // }
-
   return (
     <>
-    <Header signOutUser={signOutUser}/>
-    <Router>
-      <Routes> 
-        <Route
-          path="/"
-          element={
-            loading ? (
-              <div>Loading...</div>
-            ) : user ? (
-              <>
-                <UserInfo user={user} />
-                <CustomerList/>
-                <ButtonContainer>
-                <SignUpButton onClick={signOutUser}>ログアウト</SignUpButton>
-                </ButtonContainer>
-              </>
-            ) : (
-              <LoginContainer>
-                <LoginBox>
-                <Title>ログインへ進む</Title>
-                <SignInButton onClick={signInWithGoogle}>Googleでサインイン</SignInButton>
-                </LoginBox>
-              </LoginContainer>
-            )
-          }
-        />
-        <Route 
-        path='/CustomerPage/:idNumber' 
-        element={<CustomerPage/>}
-        />
-      </Routes>
-    </Router>
-
-    {/* {user ? (
-      <>
-        <UserInfo user={user} />
-        <ButtonContainer>
-        <SignUpButton onClick={signOutUser}>ログアウト</SignUpButton>
-        </ButtonContainer>
-      </>
-    ) : (
-      <>
-      <Header />
-      <LoginContainer>
-        <LoginBox>
-        <Title>ログインへ進む</Title>
-        <SignInButton onClick={signInWithGoogle}>Googleでサインイン</SignInButton>
-        </LoginBox>
-      </LoginContainer>
-
-    )} */}
-    <ButtonContainer>
-    </ButtonContainer>
+      <Header signOutUser={signOutUser}/>
+      <Router>
+        <Routes> 
+          <Route
+            path="/"
+            element={
+              loading ? (
+                <div>Loading...</div>
+              ) : user ? (
+                <>
+                  <UserInfo user={user} />
+                  <CustomerList/>
+                  <ButtonContainer>
+                  <SignUpButton onClick={signOutUser}>ログアウト</SignUpButton>
+                  </ButtonContainer>
+                </>
+              ) : (
+                <LoginContainer>
+                  <LoginBox>
+                  <Title>ログインへ進む</Title>
+                  <SignInButton onClick={signInWithGoogle}>Googleでサインイン</SignInButton>
+                  </LoginBox>
+                </LoginContainer>
+              )
+            }
+          />
+          <Route 
+          path='/CustomerPage/:idNumber' 
+          element={<CustomerPage/>}
+          />
+        </Routes>
+      </Router>
     </>
   )
 }
