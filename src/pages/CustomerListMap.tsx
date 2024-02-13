@@ -91,6 +91,15 @@ const CustomerListMap = () => {
       setDisplayedCustomers(filtered);
     };
 
+    const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+      const newSearchTerm = event.target.value;
+      setSearchTerm(newSearchTerm);
+
+      if (newSearchTerm.trim() === '') {
+        setDisplayedCustomers(customers);
+      }
+    }
+
     const handleSort = (sortBy: keyof Customer) => {
       const sortedCustomers = [...displayedCustomers].sort((a,b)=> {
         if (sortOrder === 'asc') {
@@ -121,9 +130,8 @@ const CustomerListMap = () => {
           type="text"
           placeholder="検索キーワード"
           value={searchTerm}
-          onChange={e => setSearchTerm(e.target.value)}
-          maxLength={50
-} 
+          onChange={handleSearchChange}
+          maxLength={50} 
           style={{ fontSize:'20px', padding:'20px'}}
         >
         </SearchTextField>
