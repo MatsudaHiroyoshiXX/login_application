@@ -7,6 +7,7 @@ import Box from '@mui/material/Box';
 import styled from '@emotion/styled';
 // import Pagination from './Pagination';
 import CustomerListMap from './CustomerListMap';
+import Pagination from './Pagination';
 
 // interface SortIconProps {
 //     isHovered: boolean;
@@ -119,6 +120,7 @@ const CustomerList = () => {
     <Grid container justifyContent="center" alignItems="center">
       <Box p={4} width="100%">
         <CustomerListMap/>
+        <Pagination/>
         {/* <Pagination 
           currentPage={currentPage}
           itemsPerPage={itemsPerPage}
