@@ -1,19 +1,41 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { CustomersData } from '../data/CustomersData';
 
 const Pagination = () => {
-  
+
+  interface Customer {
+    name: string; // 名前
+    carNumber: string; // 車両ナンバー
+    inspectionExpiryDate: string; // 車検満了日
+    currentCar: string; // 現在の車
+    proposedCar: string; // 提案された車
+    videoUrl: string; // 動画URL
+    updateDate: string; // 更新日
+    [key: string]: string;
+  }
+
   return (
     <Root>
-      <PageContainer>
+      {/* <PageContainer>
         <Button>
-          <PreviousPageButton>←</PreviousPageButton>
-          <PageButton>1</PageButton>
+          <PreviousPageButton onClick={() => paginate(currentPage - 1)} disabled={currentPage === 1}>
+            ←
+          </PreviousPageButton>
+          {Array.from({ length: Math.ceil(customers.length / itemsPerPage) }).map((_, index) => (
+          <PageButton key={index} onClick={() => paginate(index + 1)} disabled={currentPage === index + 1}>
+            {index + 1}
+          </PageButton>
+          ))}
           <Dot>...</Dot>
-          <LastPageButton>10</LastPageButton>
-          <NextPageButton>→</NextPageButton>
+          <LastPageButton onClick={() => paginate(lastPage)} disabled={currentPage === lastPage}>
+            10
+          </LastPageButton>
+          <NextPageButton onClick={() => paginate(currentPage + 1)} disabled={currentPage === lastPage}>
+            →
+          </NextPageButton>
         </Button>
-      </PageContainer>
+      </PageContainer> */}
     </Root>
   
   );

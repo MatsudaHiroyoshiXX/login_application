@@ -8,6 +8,7 @@ import UpArrow from '../img/UpArrow.png';
 import DownArrow from '../img/DownArrow.png';
 import { useNavigate } from 'react-router-dom';
 import { CustomersData } from '../data/CustomersData'
+import Pagination from './Pagination'
 
 const CustomerListMap = () => {
   
@@ -82,6 +83,20 @@ const CustomerListMap = () => {
       </div>
         ) : null
       )
+
+      const [data, setData] = useState<Customer[]>(displayedCustomers);
+      console.log(customers)
+      const [currentPage, setCurrentPage] = useState(1);
+      const [currentCustomers, setCurrentCustomers] = useState();
+      const itemsPerPage = 3;
+    
+      const indexOfLastCustomer = currentPage * itemsPerPage;
+      const indexOfFirstCustomer = indexOfLastCustomer - itemsPerPage;
+      const currentItems = data.slice(indexOfFirstCustomer, indexOfLastCustomer);
+    
+      const paginate = (pageNumber: React.SetStateAction<number>) => setCurrentPage(pageNumber);
+    
+      const lastPage = Math.ceil(data.length / itemsPerPage);
 
   return (
     <Root>
@@ -166,6 +181,11 @@ const CustomerListMap = () => {
           ))}
         </tbody>
       </Table>
+      {/* <Pagination 
+        currentPage={currentPage} 
+        totalPages={Math.ceil(data.length / itemsPerPage)}
+       
+      /> */}
 
     </Root>
   
