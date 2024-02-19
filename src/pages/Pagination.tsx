@@ -2,7 +2,13 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { CustomersData } from '../data/CustomersData';
 
-const Pagination = () => {
+interface PaginationProps {
+  currentPage: number;
+  totalPages: number;
+  onPageChange: (page: number) => void;
+}
+
+const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPageChange }) => {
 
   interface Customer {
     name: string; // 名前
@@ -15,27 +21,43 @@ const Pagination = () => {
     [key: string]: string;
   }
 
+  const handlePageChange = (page: number) => {
+    onPageChange(page);
+  };
+
+  const renderPageNumbers = () => {
+    const pageNumbers: React.ReactNode[] = [];
+    for (let i = 1; i <= totalPages; i++) {
+      pageNumbers.push(
+        <PageButton key={i} className={currentPage === i ? 'active' : ''} onClick={() => handlePageChange(i)}>
+          {i}
+        </PageButton>
+      );
+    }
+    return pageNumbers;
+  };
+
   return (
     <Root>
-      {/* <PageContainer>
+      <PageContainer>
         <Button>
-          <PreviousPageButton onClick={() => paginate(currentPage - 1)} disabled={currentPage === 1}>
-            ←
-          </PreviousPageButton>
-          {Array.from({ length: Math.ceil(customers.length / itemsPerPage) }).map((_, index) => (
-          <PageButton key={index} onClick={() => paginate(index + 1)} disabled={currentPage === index + 1}>
-            {index + 1}
-          </PageButton>
-          ))}
+          {currentPage !== 1 ? (
+            <PreviousPageButton onClick={() => handlePageChange(currentPage - 1)}>
+              ←
+            </PreviousPageButton>
+          ):null }
+          {renderPageNumbers()}
           <Dot>...</Dot>
-          <LastPageButton onClick={() => paginate(lastPage)} disabled={currentPage === lastPage}>
-            10
+          <LastPageButton onClick={() => handlePageChange(totalPages)}>
+            {totalPages}
           </LastPageButton>
-          <NextPageButton onClick={() => paginate(currentPage + 1)} disabled={currentPage === lastPage}>
-            →
-          </NextPageButton>
+          {currentPage !== totalPages ? (
+            <NextPageButton onClick={() => handlePageChange(currentPage + 1)}>
+              →
+            </NextPageButton>
+          ) :null }
         </Button>
-      </PageContainer> */}
+      </PageContainer>
     </Root>
   
   );
@@ -45,7 +67,7 @@ const Root = styled.div`
   
 `
 const PageContainer = styled.div`
-  padding-top:10px;
+  padding-top:30px;
 `
 const Button = styled.div`
   position: relative;
@@ -91,4 +113,3 @@ const NextPageButton = styled.button`
 `
 
 export default Pagination;
-

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import SearchIcon from '@mui/icons-material/Search';
 import EditIcon from '@mui/icons-material/Edit';
@@ -39,7 +39,7 @@ const CustomerListMap = () => {
     };
     const [customers, setCustomers] = useState<Customer[]>(CustomersData);
 
-    const [displayedCustomers, setDisplayedCustomers] = useState<Customer[]>(customers);
+    const [searchedCustomers, setSearchedCustomers] = useState<Customer[]>(customers);
 
     const handleSearch = () => {
       const terms = searchTerm.split(/\s+/).filter(Boolean);
@@ -50,7 +50,7 @@ const CustomerListMap = () => {
           )
         );
       });
-      setDisplayedCustomers(filtered);
+      setSearchedCustomers(filtered);
     };
 
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -58,12 +58,12 @@ const CustomerListMap = () => {
       setSearchTerm(newSearchTerm);
 
       if (newSearchTerm.trim() === '') {
-        setDisplayedCustomers(customers);
+        setSearchedCustomers(customers);
       }
     }
 
     const handleSort = (sortBy: keyof Customer) => {
-      const sortedCustomers = [...displayedCustomers].sort((a,b)=> {
+      const sortedCustomers = [...searchedCustomers].sort((a,b)=> {
         if (sortOrder === 'asc') {
           return a[sortBy].localeCompare(b[sortBy],'ja-JP');
         } else {
@@ -71,7 +71,7 @@ const CustomerListMap = () => {
         }
       });
 
-      setDisplayedCustomers(sortedCustomers);
+      setSearchedCustomers(sortedCustomers);
       setSortOrder((prevOrder) => (prevOrder === 'asc' ? 'desc' : 'asc'));
     };
 
@@ -84,20 +84,25 @@ const CustomerListMap = () => {
         ) : null
       )
 
-      const [data, setData] = useState<Customer[]>(displayedCustomers);
-      console.log(customers)
-      const [currentPage, setCurrentPage] = useState(1);
-      const [currentCustomers, setCurrentCustomers] = useState();
+      const [data, setData] = useState<Customer[]>(searchedCustomers);
+      const [currentPage, setCurrentPage] = useState<number>(1);
       const itemsPerPage = 3;
     
       const indexOfLastCustomer = currentPage * itemsPerPage;
       const indexOfFirstCustomer = indexOfLastCustomer - itemsPerPage;
       const currentItems = data.slice(indexOfFirstCustomer, indexOfLastCustomer);
     
-      const paginate = (pageNumber: React.SetStateAction<number>) => setCurrentPage(pageNumber);
-    
       const lastPage = Math.ceil(data.length / itemsPerPage);
 
+      const handlePageChange = (page: number) => {
+        setCurrentPage(page);
+      };
+
+      useEffect(() => {
+        setData(searchedCustomers)
+      }, [searchedCustomers])
+      
+      
   return (
     <Root>
       <PageTitle>お客様情報一覧</PageTitle>
@@ -164,7 +169,7 @@ const CustomerListMap = () => {
         </thead>
 
         <tbody>
-          {displayedCustomers.map((row,index) => (
+          {currentItems.map((row,index) => (
             <TableRow key={index}>
               <TableData onClick={() => handleUserClick(row.name)}>{row.name}</TableData>
               <TableData>{row.carNumber}</TableData>
@@ -181,11 +186,11 @@ const CustomerListMap = () => {
           ))}
         </tbody>
       </Table>
-      {/* <Pagination 
+      <Pagination 
         currentPage={currentPage} 
-        totalPages={Math.ceil(data.length / itemsPerPage)}
-       
-      /> */}
+        totalPages={lastPage} 
+        onPageChange={handlePageChange}
+      />
 
     </Root>
   

@@ -9,7 +9,7 @@ export const CustomersData = [
     updateDate: '2023/03/24'
     },
     { 
-    name: 'か鈴木 花子', 
+    name: 'あ鈴木 花子', 
     carNumber: '神奈川 300 さ 2020',
     inspectionExpiryDate: '2023/05/01',
     currentCar: 'フィットLグレード',
@@ -18,7 +18,7 @@ export const CustomersData = [
     updateDate: '2023/10/22'
     },
     { 
-    name: 'さ佐藤 二郎', 
+    name: 'あ佐藤 二郎', 
     carNumber: 'さいたま 400 き 2021',
     inspectionExpiryDate: '2023/01/01',
     currentCar: 'エスティマPグレード',
@@ -27,7 +27,7 @@ export const CustomersData = [
     updateDate: '2023/08/30'
     },
     { 
-    name: 'た北野 悠人', 
+    name: 'あ北野 悠人', 
     carNumber: '旭川 500 ぬ 2022',
     inspectionExpiryDate: '2023/06/10',
     currentCar: 'ヴェゼルRグレード',
@@ -36,7 +36,7 @@ export const CustomersData = [
     updateDate: '2023/11/23'
     },
     { 
-    name: 'な寄谷 海斗', 
+    name: 'あ寄谷 海斗', 
     carNumber: '札幌 600 よ 2023',
     inspectionExpiryDate: '2023/08/17',
     currentCar: 'ハリアーDグレード',
