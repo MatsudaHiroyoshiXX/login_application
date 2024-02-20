@@ -9,6 +9,7 @@ import DownArrow from '../img/DownArrow.png';
 import { useNavigate } from 'react-router-dom';
 import { CustomersData } from '../data/CustomersData'
 import Pagination from './Pagination'
+import SearchTutorial from './SearchTutorial'
 
 const CustomerListMap = () => {
   
@@ -87,6 +88,7 @@ const CustomerListMap = () => {
       const [data, setData] = useState<Customer[]>(searchedCustomers);
       const [currentPage, setCurrentPage] = useState<number>(1);
       const itemsPerPage = 3;
+      const maxPageNumbers = 7;
     
       const indexOfLastCustomer = currentPage * itemsPerPage;
       const indexOfFirstCustomer = indexOfLastCustomer - itemsPerPage;
@@ -191,7 +193,7 @@ const CustomerListMap = () => {
         totalPages={lastPage} 
         onPageChange={handlePageChange}
       />
-
+      <SearchTutorial/>
     </Root>
   
   );

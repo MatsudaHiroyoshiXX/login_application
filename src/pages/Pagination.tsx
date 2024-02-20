@@ -73,7 +73,6 @@ const Button = styled.div`
   position: relative;
   display: flex;
   justify-content: center;
-  cursor: pointer;
 `
 const PreviousPageButton = styled.button`
   width: 70px;
@@ -82,6 +81,14 @@ const PreviousPageButton = styled.button`
   background-color: white;
   border: 1px solid blue;
   border-radius:5px;
+  cursor: pointer;
+  &:hover{
+    background-color: #f5f5f5;
+  }
+  &:active{
+    background-color: blue;
+    color: #fff;
+  }
 `
 const PageButton = styled.button`
   width: 70px;
@@ -90,6 +97,14 @@ const PageButton = styled.button`
   background-color: white;
   border: 1px solid blue;
   border-radius:5px;
+  cursor: pointer;
+  &:hover{
+    background-color: #f5f5f5;
+  }
+  &:active{
+    background-color: blue;
+    color: #fff;
+  }
 `
 const Dot = styled.div`
   margin: 10px 30px;
@@ -102,6 +117,14 @@ const LastPageButton = styled.button`
   background-color: white;
   border: 1px solid blue;
   border-radius:5px;
+  cursor: pointer;
+  &:hover{
+    background-color: #f5f5f5;
+  }
+  &:active{
+    background-color: blue;
+    color: #fff;
+  }
 `
 const NextPageButton = styled.button`
   width: 70px;
@@ -110,6 +133,14 @@ const NextPageButton = styled.button`
   background-color: white;
   border: 1px solid blue;
   border-radius:5px;
+  cursor: pointer;
+  &:hover{
+    background-color: #f5f5f5;
+  }
+  &:active{
+    background-color: blue;
+    color: #fff;
+  }
 `
 
 export default Pagination;
