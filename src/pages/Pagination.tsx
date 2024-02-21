@@ -27,13 +27,21 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
 
   const renderPageNumbers = () => {
     const pageNumbers: React.ReactNode[] = [];
-    for (let i = 1; i <= totalPages; i++) {
-      pageNumbers.push(
-        <PageButton key={i} className={currentPage === i ? 'active' : ''} onClick={() => handlePageChange(i)}>
-          {i}
-        </PageButton>
-      );
-    }
+    Array.from({ length: totalPages }).forEach((_, i) => {
+      const pageNumber =  i + 1;
+      const maxPage = Math.min(totalPages, currentPage + 6);
+      // // pageNumber !== totalPages || 
+      // currentPage > pageNumber || pageNumber <= maxPage &&
+        pageNumbers.push(
+          <PageButton
+            key={pageNumber}
+            isActive={currentPage === pageNumber}
+            onClick={() => handlePageChange(pageNumber)}
+          >
+            {pageNumber}
+          </PageButton>
+        );
+    });
     return pageNumbers;
   };
 
@@ -41,11 +49,15 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
     <Root>
       <PageContainer>
         <Button>
+
           {currentPage !== 1 ? (
             <PreviousPageButton onClick={() => handlePageChange(currentPage - 1)}>
               ←
             </PreviousPageButton>
-          ):null }
+          ):(
+            <NullButton>
+            </NullButton> 
+          )}
           {renderPageNumbers()}
           <Dot>...</Dot>
           <LastPageButton onClick={() => handlePageChange(totalPages)}>
@@ -55,7 +67,10 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
             <NextPageButton onClick={() => handlePageChange(currentPage + 1)}>
               →
             </NextPageButton>
-          ) :null }
+          ):(
+            <NullButton>
+            </NullButton> 
+          )}
         </Button>
       </PageContainer>
     </Root>
@@ -83,23 +98,28 @@ const PreviousPageButton = styled.button`
   border-radius:5px;
   cursor: pointer;
   &:hover{
-    background-color: #f5f5f5;
+    background-color: #f3e5f5;
   }
   &:active{
     background-color: blue;
     color: #fff;
   }
 `
-const PageButton = styled.button`
+const NullButton = styled.div`
   width: 70px;
   height: 40px;
-  color: blue;
-  background-color: white;
+`
+const PageButton = styled.button<{isActive:boolean}>`
+  background-color: ${(props) => (props.isActive ? 'blue' : 'white')};
+  width: 70px;
+  height: 40px;
+  color:  ${(props) => (props.isActive ? 'white' : 'blue')};
   border: 1px solid blue;
   border-radius:5px;
   cursor: pointer;
   &:hover{
-    background-color: #f5f5f5;
+    background-color: ${(props) => (props.isActive ? 'blue' : '#f3e5f5')};
+    opacity: 0.8;
   }
   &:active{
     background-color: blue;
@@ -119,7 +139,7 @@ const LastPageButton = styled.button`
   border-radius:5px;
   cursor: pointer;
   &:hover{
-    background-color: #f5f5f5;
+    background-color: #f3e5f5;
   }
   &:active{
     background-color: blue;
@@ -135,7 +155,7 @@ const NextPageButton = styled.button`
   border-radius:5px;
   cursor: pointer;
   &:hover{
-    background-color: #f5f5f5;
+    background-color: #f3e5f5;
   }
   &:active{
     background-color: blue;

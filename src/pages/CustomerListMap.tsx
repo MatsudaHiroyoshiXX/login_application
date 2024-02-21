@@ -10,8 +10,13 @@ import { useNavigate } from 'react-router-dom';
 import { CustomersData } from '../data/CustomersData'
 import Pagination from './Pagination'
 import SearchTutorial from './SearchTutorial'
+import { ButtonGroup, TableContainer } from '@mui/material';
 
-const CustomerListMap = () => {
+interface SignOutProps {
+  signOutUser?: () => void;
+}
+
+const CustomerListMap: React.FC<SignOutProps> = ({signOutUser}) => {
   
     const [searchTerm, setSearchTerm] = useState('');
     const [sortOrder, setSortOrder] = useState('asc');
@@ -126,74 +131,78 @@ const CustomerListMap = () => {
 
       </SearchBox>
 
- 
-      <Table>
-        <thead>
-          <TableRow>
-            <TableHeader 
-              onMouseEnter={() => setHoveredColumn('name')}
-              onMouseLeave={() => setHoveredColumn(null)}
-              >
-                <ArrowImage isHovered={hoveredColumn === 'name'} handleSort={() => handleSort('name')} />
-              お名前
-            </TableHeader>
-            <TableHeader
-              onMouseEnter={() => setHoveredColumn('carNumber')}
-              onMouseLeave={() => setHoveredColumn(null)}
-              >
-                <ArrowImage isHovered={hoveredColumn === 'carNumber'} handleSort={() => handleSort('carNumber')} />
-              車両ナンバー
-            </TableHeader>
-            <TableHeader
-              onMouseEnter={() => setHoveredColumn('inspectionExpiryDate')}
-              onMouseLeave={() => setHoveredColumn(null)}
-              >
-                <ArrowImage isHovered={hoveredColumn === 'inspectionExpiryDate'} handleSort={() => handleSort('inspectionExpiryDate')} />
-              車検満了日
-            </TableHeader>
-            <TableHeader
-              onMouseEnter={() => setHoveredColumn('currentCar')}
-              onMouseLeave={() => setHoveredColumn(null)}
-              >
-                <ArrowImage isHovered={hoveredColumn === 'currentCar'} handleSort={() => handleSort('currentCar')} />
-              乗り換え提案
-            </TableHeader>
-            <TableHeader>動画URL</TableHeader>
-            <TableHeader
-              onMouseEnter={() => setHoveredColumn('updateDate')}
-              onMouseLeave={() => setHoveredColumn(null)}
-              >
-                <ArrowImage isHovered={hoveredColumn === 'updateDate'} handleSort={() => handleSort('updateDate')} />
-              更新日
-            </TableHeader>
-            <TableHeader>詳細&動画編集</TableHeader>
-          </TableRow>
-        </thead>
-
-        <tbody>
-          {currentItems.map((row,index) => (
-            <TableRow key={index}>
-              <TableData onClick={() => handleUserClick(row.name)}>{row.name}</TableData>
-              <TableData>{row.carNumber}</TableData>
-              <TableData>{row.inspectionExpiryDate}</TableData>
-              <TableData>{row.currentCar} / {row.proposedCar}</TableData>
-              <TableData><IconButton><QrCodeIcon /></IconButton>
-              <a href={row.videoUrl}>{row.videoUrl}</a></TableData>
-              <TableData>{row.updateDate}</TableData>
-              <TableData>
-                <IconButton><AccountCircleIcon /></IconButton>
-                <IconButton><EditIcon /></IconButton>
-              </TableData>
+      <TableWrapper>
+        <Table>
+          <thead>
+            <TableRow>
+              <TableHeader 
+                onMouseEnter={() => setHoveredColumn('name')}
+                onMouseLeave={() => setHoveredColumn(null)}
+                >
+                  <ArrowImage isHovered={hoveredColumn === 'name'} handleSort={() => handleSort('name')} />
+                お名前
+              </TableHeader>
+              <TableHeader
+                onMouseEnter={() => setHoveredColumn('carNumber')}
+                onMouseLeave={() => setHoveredColumn(null)}
+                >
+                  <ArrowImage isHovered={hoveredColumn === 'carNumber'} handleSort={() => handleSort('carNumber')} />
+                車両ナンバー
+              </TableHeader>
+              <TableHeader
+                onMouseEnter={() => setHoveredColumn('inspectionExpiryDate')}
+                onMouseLeave={() => setHoveredColumn(null)}
+                >
+                  <ArrowImage isHovered={hoveredColumn === 'inspectionExpiryDate'} handleSort={() => handleSort('inspectionExpiryDate')} />
+                車検満了日
+              </TableHeader>
+              <TableHeader
+                onMouseEnter={() => setHoveredColumn('currentCar')}
+                onMouseLeave={() => setHoveredColumn(null)}
+                >
+                  <ArrowImage isHovered={hoveredColumn === 'currentCar'} handleSort={() => handleSort('currentCar')} />
+                乗り換え提案
+              </TableHeader>
+              <TableHeader>動画URL</TableHeader>
+              <TableHeader
+                onMouseEnter={() => setHoveredColumn('updateDate')}
+                onMouseLeave={() => setHoveredColumn(null)}
+                >
+                  <ArrowImage isHovered={hoveredColumn === 'updateDate'} handleSort={() => handleSort('updateDate')} />
+                更新日
+              </TableHeader>
+              <TableHeader>詳細&動画編集</TableHeader>
             </TableRow>
-          ))}
-        </tbody>
-      </Table>
+          </thead>
+
+          <tbody>
+            {currentItems.map((row,index) => (
+              <TableRow key={index}>
+                <TableData onClick={() => handleUserClick(row.name)}>{row.name}</TableData>
+                <TableData>{row.carNumber}</TableData>
+                <TableData>{row.inspectionExpiryDate}</TableData>
+                <TableData>{row.currentCar} / {row.proposedCar}</TableData>
+                <TableData><IconButton><QrCodeIcon /></IconButton>
+                <a href={row.videoUrl}>{row.videoUrl}</a></TableData>
+                <TableData>{row.updateDate}</TableData>
+                <TableData>
+                  <IconButton><AccountCircleIcon /></IconButton>
+                  <IconButton><EditIcon /></IconButton>
+                </TableData>
+              </TableRow>
+            ))}
+          </tbody>
+        </Table>
+      </TableWrapper>
       <Pagination 
         currentPage={currentPage} 
         totalPages={lastPage} 
         onPageChange={handlePageChange}
       />
-      <SearchTutorial/>
+      <ButtonBox>
+        <SignOutButton onClick={signOutUser}>ログアウト</SignOutButton>
+      </ButtonBox>
+      {/* <SearchTutorial/> */}
     </Root>
   
   );
@@ -246,26 +255,55 @@ const StartIcon = styled.div`
   position: relative;
   top:2px;
 `
+const TableWrapper = styled.div`
+  height: 280px;
+`
 const Table = styled.table`
   margin-top: 45px;
-  width:100%;
+  width:1410px;
   border-collapse:collapse;
 `
 const TableRow = styled.tr`
   text-align: left;
+  border-bottom: solid rgba(224, 224, 224, 1);
 `
 const TableHeader = styled.th`
   padding: 15px 20px;
   font-weight: 400;
-  border-bottom: solid rgba(224, 224, 224, 1);
   position: relative;
 `
 const TableData = styled.td`
   padding:20px 20px;
-  border-bottom: solid rgba(224, 224, 224, 1);
 `
 const IconButton = styled.button`
 
+`
+const ButtonBox = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 50px;
+`
+const SignOutButton = styled.button`
+  padding: 15px 35px;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius:5px;
+  background-color: #ffffff; // サインアップは白色の背景
+  color: #6200ea;
+  border: 2px solid #6200ea; // プライマリーカラーの枠線
+  box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
+  transition: background-color 0.3s,transform 0.3s;
+  box-sizing: border-box;
+  &:hover {
+    background-color: #f3e5f5; // ホバー時は薄いプライマリーカラー
+    transform: translateY(-2px);
+    box-shadow: 0 7px 14px rgba(50, 50, 93, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08);
+  }
+
+  &:active {
+    background-color: #e1bee7; // クリック時は少し濃い色
+    transform: translateY(1px);
+  }
 `
 
 export default CustomerListMap;

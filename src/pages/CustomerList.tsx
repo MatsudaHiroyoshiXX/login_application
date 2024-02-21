@@ -42,8 +42,12 @@ interface Post {
     videoUrl: string; // 動画URL
     updateDate: string; // 更新日
   }
-  
-const CustomerList = () => {
+
+  interface SignOutProps {
+    signOutUser?: () => void;
+  }
+
+const CustomerList: React.FC<SignOutProps> = ({signOutUser}) => {
   // const [customers, setCustomers] = useState([
   //   { 
   //     idNumber: 1,
@@ -118,7 +122,7 @@ const CustomerList = () => {
   return (
     <Grid container justifyContent="center" alignItems="center">
       <Box p={4} width="100%">
-        <CustomerListMap/>
+        <CustomerListMap signOutUser={signOutUser}/>
         {/* <Pagination 
           currentPage={currentPage}
           itemsPerPage={itemsPerPage}

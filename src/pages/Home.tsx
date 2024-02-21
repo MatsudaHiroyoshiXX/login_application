@@ -50,10 +50,10 @@ function Home() {
               ) : user ? (
                 <>
                   <UserInfo user={user} />
-                  <CustomerList/>
-                  <ButtonContainer>
-                  <SignUpButton onClick={signOutUser}>ログアウト</SignUpButton>
-                  </ButtonContainer>
+                  <CustomerList signOutUser={signOutUser}/>
+                  {/* <ButtonContainer>
+                    <SignUpButton onClick={signOutUser}>ログアウト</SignUpButton>
+                  </ButtonContainer> */}
                 </>
               ) : (
                 <LoginContainer>
