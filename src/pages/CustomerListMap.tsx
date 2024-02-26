@@ -6,7 +6,7 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import QrCodeIcon from '@mui/icons-material/QrCode';
 import UpArrow from '../img/UpArrow.png';
 import DownArrow from '../img/DownArrow.png';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { CustomersData } from '../data/CustomersData'
 
 const CustomerListMap = () => {
@@ -31,11 +31,6 @@ const CustomerListMap = () => {
       [key: string]: string;
     }
 
-    const navigate = useNavigate();
-    const handleUserClick  = (name: string) => {
-      // ここで遷移先のパスを指定
-      navigate('/CustomerPage/${name}');
-    };
     const [customers, setCustomers] = useState<Customer[]>(CustomersData);
 
     const [displayedCustomers, setDisplayedCustomers] = useState<Customer[]>(customers);
@@ -151,7 +146,7 @@ const CustomerListMap = () => {
         <tbody>
           {displayedCustomers.map((row,index) => (
             <TableRow key={index}>
-              <TableData onClick={() => handleUserClick(row.name)}>{row.name}</TableData>
+              <TableData>{row.name}</TableData>
               <TableData>{row.carNumber}</TableData>
               <TableData>{row.inspectionExpiryDate}</TableData>
               <TableData>{row.currentCar} / {row.proposedCar}</TableData>
@@ -159,7 +154,11 @@ const CustomerListMap = () => {
               <a href={row.videoUrl}>{row.videoUrl}</a></TableData>
               <TableData>{row.updateDate}</TableData>
               <TableData>
-                <IconButton><AccountCircleIcon /></IconButton>
+                <IconButton>
+                  <Link to={`/customer/${row.name}`}>
+                    <AccountCircleIcon />
+                  </Link>
+                </IconButton>
                 <IconButton><EditIcon /></IconButton>
               </TableData>
             </TableRow>
