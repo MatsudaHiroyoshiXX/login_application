@@ -8,12 +8,14 @@ import UpArrow from '../img/UpArrow.png';
 import DownArrow from '../img/DownArrow.png';
 import { Link } from 'react-router-dom';
 import { CustomersData } from '../data/CustomersData'
+import QrCode from './QrCode'
 
 const CustomerListMap = () => {
   
     const [searchTerm, setSearchTerm] = useState('');
     const [sortOrder, setSortOrder] = useState('asc');
     const [hoveredColumn, setHoveredColumn] = useState<null | string>(null);
+    const [displayedElement, setDisplayedElement] = useState<boolean>(false);
 
     interface SortIconProps {
       isHovered: boolean;
@@ -67,6 +69,16 @@ const CustomerListMap = () => {
 
       setDisplayedCustomers(sortedCustomers);
       setSortOrder((prevOrder) => (prevOrder === 'asc' ? 'desc' : 'asc'));
+    };
+
+    const handleButtonClick = () => {
+      // ボタンがクリックされたら、指定された要素を表示
+      setDisplayedElement(true);
+    };
+
+    const handleHideButtonClick = () => {
+      // 非表示ボタンがクリックされたら、要素を非表示にする
+      setDisplayedElement(false);
     };
 
     const ArrowImage: React.FC<SortIconProps> = ({isHovered, handleSort}) => (
@@ -150,27 +162,43 @@ const CustomerListMap = () => {
               <TableData>{row.carNumber}</TableData>
               <TableData>{row.inspectionExpiryDate}</TableData>
               <TableData>{row.currentCar} / {row.proposedCar}</TableData>
-              <TableData><IconButton><QrCodeIcon /></IconButton>
+              <TableData><CustomQrCodeIcon onClick={handleButtonClick} />
               <a href={row.videoUrl}>{row.videoUrl}</a></TableData>
               <TableData>{row.updateDate}</TableData>
               <TableData>
-                <IconButton>
                   <Link to={`/customer/${row.name}`}>
-                    <AccountCircleIcon />
+                    <CustomAccountCircle />
                   </Link>
-                </IconButton>
-                <IconButton><EditIcon /></IconButton>
+                <CustomEditIcon />
               </TableData>
             </TableRow>
           ))}
         </tbody>
       </Table>
-
+        {displayedElement && (
+          <QrCode handleHideButtonClick={handleHideButtonClick} 
+            url={'https://example.com'} 
+            size={450}
+            />
+        )}
+        
+        
     </Root>
   
   );
 };
 
+const CustomAccountCircle = styled(AccountCircleIcon)({
+  marginLeft:'10px',
+})
+
+const CustomEditIcon = styled(EditIcon)({
+  marginLeft:'20px'
+})
+
+const CustomQrCodeIcon = styled(QrCodeIcon)({
+  marginLeft:'10px'
+})
 
 const Root = styled.div`
   padding:20px;
@@ -235,9 +263,6 @@ const TableHeader = styled.th`
 const TableData = styled.td`
   padding:20px 20px;
   border-bottom: solid rgba(224, 224, 224, 1);
-`
-const IconButton = styled.button`
-
 `
 
 export default CustomerListMap;
