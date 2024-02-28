@@ -48,13 +48,13 @@ function Home() {
               loading ? (
                 <div>Loading...</div>
               ) : user ? (
-                <Container>
+                <>
                   <UserInfo user={user} />
                   <CustomerList/>
                   <ButtonContainer>
                   <SignUpButton onClick={signOutUser}>ログアウト</SignUpButton>
                   </ButtonContainer>
-                </Container>
+                </>
               ) : (
                 <LoginContainer>
                   <LoginBox>
@@ -74,12 +74,6 @@ function Home() {
     </>
   )
 }
-
-const Container = styled.div`
-  position: relative;
-  width: 100vw;
-  height: 100vh;
-`
 
 const ButtonContainer = styled.div`
   display: flex;

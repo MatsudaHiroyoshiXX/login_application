@@ -13,8 +13,10 @@ const QrCode: React.FC<handleHideButtonClickProps>= ({url,size,handleHideButtonC
   return (
     <Root>
       <QrContainer>
-      <QrCodeCanvas value={url} size={size} />
-      <EraseButton onClick={handleHideButtonClick}>❌</EraseButton>
+      <EraseButton onClick={handleHideButtonClick}></EraseButton>
+      <QrCodeCanvasContainer>
+        <QrCodeCanvas value={url} size={size} />
+      </QrCodeCanvasContainer>
       </QrContainer>
     </Root>
   );
@@ -22,33 +24,53 @@ const QrCode: React.FC<handleHideButtonClickProps>= ({url,size,handleHideButtonC
 
 const Root = styled.div`
 `
+const QrCodeCanvasContainer = styled.div`
+  padding:50px 100px 100px;
+`
 
 const QrContainer =styled.div`
   background-color: #a9a9a9;
-  height: 700px;
-  width: 700px;
-  display: flex;
-  justify-content: center;
+  display: flex; 
+  flex-direction: column;
+  justify-content: space-between;
   align-items: center;
   border-radius:10px;
   position: fixed;
-  margin-left:350px;
-  margin-top: -750px;
-  /* top: 50%;
+  top: 50%;
   left: 50%;
-  transform: 'translate(-50%,-50%)'  */
+  transform: translate(-50%,-50%);
 `
-const EraseButton = styled.button`
-  position: absolute;
-  top: 0;
-  right: 0;
-  margin: 15px;
-  border-radius:10px;
-  border:none;
-  font-size: 30px;
+const EraseButton = styled.div`
+  margin: 20px 20px 0px auto;
   cursor: pointer;
-  `
+  display: block;
+  position: relative;
+  width: 30px;
+  height: 30px;
+  border: 2px solid #333; /* 枠の調整 */
+  background: #fff; /* ボタンの背景色 */
+  
+  &::before,
+  &::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 3px; /* 棒の幅（太さ） */
+    height: 27px; /* 棒の高さ */
+    background: #333; /* バツ印の色 */
+    transform: translate(-50%, -50%);
+  }
 
+  &::before {
+    transform: translate(-50%, -50%) rotate(45deg);
+  }
+
+  &::after {
+    transform: translate(-50%, -50%) rotate(-45deg);
+  }
+
+  `
 
 
 export default QrCode;

@@ -16,6 +16,7 @@ const CustomerListMap = () => {
     const [sortOrder, setSortOrder] = useState('asc');
     const [hoveredColumn, setHoveredColumn] = useState<null | string>(null);
     const [displayedElement, setDisplayedElement] = useState<boolean>(false);
+    const [url,setUrl] = useState('');
 
     interface SortIconProps {
       isHovered: boolean;
@@ -71,9 +72,10 @@ const CustomerListMap = () => {
       setSortOrder((prevOrder) => (prevOrder === 'asc' ? 'desc' : 'asc'));
     };
 
-    const handleButtonClick = () => {
+    const handleButtonClick = (videoUrl:string) => {
       // ボタンがクリックされたら、指定された要素を表示
       setDisplayedElement(true);
+      setUrl(videoUrl);
     };
 
     const handleHideButtonClick = () => {
@@ -100,7 +102,6 @@ const CustomerListMap = () => {
           value={searchTerm}
           onChange={handleSearchChange}
           maxLength={50} 
-          style={{ fontSize:'20px', padding:'20px'}}
         >
         </SearchTextField>
 
@@ -162,8 +163,12 @@ const CustomerListMap = () => {
               <TableData>{row.carNumber}</TableData>
               <TableData>{row.inspectionExpiryDate}</TableData>
               <TableData>{row.currentCar} / {row.proposedCar}</TableData>
-              <TableData><CustomQrCodeIcon onClick={handleButtonClick} />
-              <a href={row.videoUrl}>{row.videoUrl}</a></TableData>
+              <TableData>
+                <UrlContainer>
+                  <CustomQrCodeIcon onClick={() => handleButtonClick(row.videoUrl)} />
+                  <a href={row.videoUrl}>{row.videoUrl}</a>
+                </UrlContainer>
+              </TableData>
               <TableData>{row.updateDate}</TableData>
               <TableData>
                   <Link to={`/customer/${row.name}`}>
@@ -177,7 +182,7 @@ const CustomerListMap = () => {
       </Table>
         {displayedElement && (
           <QrCode handleHideButtonClick={handleHideButtonClick} 
-            url={'https://example.com'} 
+            url={url} 
             size={450}
             />
         )}
@@ -193,12 +198,20 @@ const CustomAccountCircle = styled(AccountCircleIcon)({
 })
 
 const CustomEditIcon = styled(EditIcon)({
-  marginLeft:'20px'
+  marginLeft:'20px',
+  color:'gray'
 })
 
 const CustomQrCodeIcon = styled(QrCodeIcon)({
-  marginLeft:'10px'
+  marginLeft:'10px',
+  cursor:'pointer',
+  color:'gray'
 })
+
+const UrlContainer = styled.div`
+  display: flex;
+  align-items:center;
+`
 
 const Root = styled.div`
   padding:20px;
@@ -219,6 +232,8 @@ const SearchTextField = styled.input`
   width: 100%;
   border: none;
   outline: none;
+  font-size:20px;
+  padding:20px;
 `
 const SearchButton = styled.button`
   position: relative;
