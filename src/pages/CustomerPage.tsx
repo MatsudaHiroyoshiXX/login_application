@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useParams } from 'react-router-dom';
+import CustomersData, { Customers } from '../data/CustomersData';
 
 
 const CustomerPage = () => {
   const { name } = useParams();
+  const customer = CustomersData.find(customer => customer.name === name);
+  console.log(customer)
   const [buttonText, setButtonText] = useState('編集');
   const toggleButton = () => {
     setButtonText((prevText) => (prevText === '編集' ? '保存' : '編集'));

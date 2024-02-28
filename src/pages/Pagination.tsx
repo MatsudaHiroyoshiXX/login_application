@@ -1,25 +1,13 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { CustomersData } from '../data/CustomersData';
 
-interface PaginationProps {
+interface PaginationProps { 
   currentPage: number;
   totalPages: number;
   onPageChange: (page: number) => void;
 }
 
 const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPageChange }) => {
-
-  interface Customer {
-    name: string; // 名前
-    carNumber: string; // 車両ナンバー
-    inspectionExpiryDate: string; // 車検満了日
-    currentCar: string; // 現在の車
-    proposedCar: string; // 提案された車
-    videoUrl: string; // 動画URL
-    updateDate: string; // 更新日
-    [key: string]: string;
-  }
 
   const handlePageChange = (page: number) => {
     onPageChange(page);

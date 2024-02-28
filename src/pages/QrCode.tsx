@@ -13,10 +13,10 @@ const QrCode: React.FC<handleHideButtonClickProps>= ({url,size,handleHideButtonC
   return (
     <Root>
       <QrContainer>
-      <EraseButton onClick={handleHideButtonClick}></EraseButton>
-      <QrCodeCanvasContainer>
-        <QrCodeCanvas value={url} size={size} />
-      </QrCodeCanvasContainer>
+        <EraseButton onClick={handleHideButtonClick}></EraseButton>
+        <QrCodeCanvasContainer>
+          <QrCodeCanvas value={url} size={size} />
+        </QrCodeCanvasContainer>
       </QrContainer>
     </Root>
   );
@@ -49,7 +49,6 @@ const EraseButton = styled.div`
   height: 30px;
   border: 2px solid #333; /* 枠の調整 */
   background: #fff; /* ボタンの背景色 */
-  
   &::before,
   &::after {
     content: "";
@@ -61,16 +60,13 @@ const EraseButton = styled.div`
     background: #333; /* バツ印の色 */
     transform: translate(-50%, -50%);
   }
-
   &::before {
     transform: translate(-50%, -50%) rotate(45deg);
   }
-
   &::after {
     transform: translate(-50%, -50%) rotate(-45deg);
   }
-
-  `
+`
 
 
 export default QrCode;

@@ -7,13 +7,38 @@ import QrCodeIcon from '@mui/icons-material/QrCode';
 import UpArrow from '../img/UpArrow.png';
 import DownArrow from '../img/DownArrow.png';
 import { Link } from 'react-router-dom';
-import { CustomersData } from '../data/CustomersData'
-import Pagination from './Pagination'
-// import SearchTutorial from './SearchTutorial'
-import QrCode from './QrCode'
+import CustomersData, { Customers } from '../data/CustomersData';
+import Pagination from './Pagination';
+// import SearchTutorial from './SearchTutorial';
+import QrCode from './QrCode';
 
 interface SignOutProps {
   signOutUser?: () => void;
+}
+
+interface SortIconProps {
+  isHovered: boolean;
+  handleSort: () => void;
+}
+
+interface Customer {
+  name: string;
+  name_kana: string;
+
+  birth_date: string;
+  id: string;
+
+  tel: string;
+  email: string;
+  carNumber: string;
+  expiration_date: string;
+  transfer_proposal: {
+    transfer_proposal_before: string;
+    transfer_proposal_after: string;
+  };
+  update_date: string;
+  movie_url: string;
+  user_memo: string;
 }
 
 const CustomerListMap: React.FC<SignOutProps> = ({signOutUser}) => {
@@ -23,25 +48,7 @@ const CustomerListMap: React.FC<SignOutProps> = ({signOutUser}) => {
     const [hoveredColumn, setHoveredColumn] = useState<null | string>(null);
     const [displayedElement, setDisplayedElement] = useState<boolean>(false);
     const [url,setUrl] = useState('');
-
-    interface SortIconProps {
-      isHovered: boolean;
-      handleSort: () => void;
-    }
-
-    interface Customer {
-      name: string; // 名前
-      carNumber: string; // 車両ナンバー
-      inspectionExpiryDate: string; // 車検満了日
-      currentCar: string; // 現在の車
-      proposedCar: string; // 提案された車
-      videoUrl: string; // 動画URL
-      updateDate: string; // 更新日
-      [key: string]: string;
-    }
-
     const [customers, setCustomers] = useState<Customer[]>(CustomersData);
-
     const [searchedCustomers, setSearchedCustomers] = useState<Customer[]>(customers);
 
     const handleSearch = () => {
@@ -67,10 +74,12 @@ const CustomerListMap: React.FC<SignOutProps> = ({signOutUser}) => {
 
     const handleSort = (sortBy: keyof Customer) => {
       const sortedCustomers = [...searchedCustomers].sort((a,b)=> {
+        const propA = a.transfer_proposal.transfer_proposal_before;
+        const propB = b.transfer_proposal.transfer_proposal_before;
         if (sortOrder === 'asc') {
-          return a[sortBy].localeCompare(b[sortBy],'ja-JP');
+          return propA.localeCompare(propB,'ja-JP');
         } else {
-          return b[sortBy].localeCompare(a[sortBy],'ja-JP');
+          return propB.localeCompare(propA,'ja-JP');
         }
       });
 
@@ -160,14 +169,14 @@ const CustomerListMap: React.FC<SignOutProps> = ({signOutUser}) => {
                 onMouseEnter={() => setHoveredColumn('inspectionExpiryDate')}
                 onMouseLeave={() => setHoveredColumn(null)}
                 >
-                  <ArrowImage isHovered={hoveredColumn === 'inspectionExpiryDate'} handleSort={() => handleSort('inspectionExpiryDate')} />
+                  <ArrowImage isHovered={hoveredColumn === 'inspectionExpiryDate'} handleSort={() => handleSort('expiration_date')} />
                 車検満了日
               </TableHeader>
               <TableHeader
                 onMouseEnter={() => setHoveredColumn('currentCar')}
                 onMouseLeave={() => setHoveredColumn(null)}
                 >
-                  <ArrowImage isHovered={hoveredColumn === 'currentCar'} handleSort={() => handleSort('currentCar')} />
+                  <ArrowImage isHovered={hoveredColumn === 'currentCar'} handleSort={() => handleSort('transfer_proposal')} />
                 乗り換え提案
               </TableHeader>
               <TableHeader>動画URL</TableHeader>
@@ -175,7 +184,7 @@ const CustomerListMap: React.FC<SignOutProps> = ({signOutUser}) => {
                 onMouseEnter={() => setHoveredColumn('updateDate')}
                 onMouseLeave={() => setHoveredColumn(null)}
                 >
-                  <ArrowImage isHovered={hoveredColumn === 'updateDate'} handleSort={() => handleSort('updateDate')} />
+                  <ArrowImage isHovered={hoveredColumn === 'updateDate'} handleSort={() => handleSort('update_date')} />
                 更新日
               </TableHeader>
               <TableHeader>詳細&動画編集</TableHeader>
@@ -187,15 +196,15 @@ const CustomerListMap: React.FC<SignOutProps> = ({signOutUser}) => {
               <TableRow key={index}>
                 <TableData>{row.name}</TableData>
                 <TableData>{row.carNumber}</TableData>
-                <TableData>{row.inspectionExpiryDate}</TableData>
-                <TableData>{row.currentCar} / {row.proposedCar}</TableData>
+                <TableData>{row.expiration_date}</TableData>
+                <TableData>{row.transfer_proposal.transfer_proposal_before} / {row.transfer_proposal.transfer_proposal_after}</TableData>
                 <TableData>
                   <UrlContainer>
-                    <CustomQrCodeIcon onClick={() => handleButtonClick(row.videoUrl)} />
-                    <a href={row.videoUrl}>{row.videoUrl}</a>
+                    <CustomQrCodeIcon onClick={() => handleButtonClick(row.movie_url)} />
+                    <a href={row.movie_url}>{row.movie_url}</a>
                   </UrlContainer>
                 </TableData>
-                <TableData>{row.updateDate}</TableData>
+                <TableData>{row.update_date}</TableData>
                 <TableData>
                     <Link to={`/customer/${row.name}`}>
                       <CustomAccountCircle />
@@ -304,7 +313,7 @@ const TableWrapper = styled.div`
   height: 280px;
 `
 const Table = styled.table`
-  width:1410px;
+  width: 1510px;
   margin: 45px auto;
   border-collapse:collapse;
 `
