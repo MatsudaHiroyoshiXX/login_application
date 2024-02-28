@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { BrowserRouter as Router, Routes, Route,  } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route  } from 'react-router-dom';
 import { auth, provider } from '../firebase_settings/firebase'; // Firebaseの設定をインポート
 import { signInWithPopup, signOut } from 'firebase/auth';
 import { useAuthState } from 'react-firebase-hooks/auth';
@@ -8,7 +8,7 @@ import UserInfo from '../components/UserInfo'
 import Header from '../components/Header'
 import CustomerList from './CustomerList'
 import CustomerPage from './CustomerPage';
-import CustomerListMap from'./CustomerListMap'
+
 
 const signInWithGoogle = () => {
   signInWithPopup(auth, provider)
@@ -66,7 +66,7 @@ function Home() {
             }
           />
           <Route 
-          path='/CustomerPage/:idNumber' 
+          path='/customer/:name'
           element={<CustomerPage/>}
           />
         </Routes>

@@ -6,11 +6,11 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import QrCodeIcon from '@mui/icons-material/QrCode';
 import UpArrow from '../img/UpArrow.png';
 import DownArrow from '../img/DownArrow.png';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { CustomersData } from '../data/CustomersData'
 import Pagination from './Pagination'
-import SearchTutorial from './SearchTutorial'
-import { ButtonGroup, TableContainer } from '@mui/material';
+// import SearchTutorial from './SearchTutorial'
+import QrCode from './QrCode'
 
 interface SignOutProps {
   signOutUser?: () => void;
@@ -21,6 +21,8 @@ const CustomerListMap: React.FC<SignOutProps> = ({signOutUser}) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [sortOrder, setSortOrder] = useState('asc');
     const [hoveredColumn, setHoveredColumn] = useState<null | string>(null);
+    const [displayedElement, setDisplayedElement] = useState<boolean>(false);
+    const [url,setUrl] = useState('');
 
     interface SortIconProps {
       isHovered: boolean;
@@ -38,11 +40,6 @@ const CustomerListMap: React.FC<SignOutProps> = ({signOutUser}) => {
       [key: string]: string;
     }
 
-    const navigate = useNavigate();
-    const handleUserClick  = (name: string) => {
-      // ここで遷移先のパスを指定
-      navigate('/CustomerPage/${name}');
-    };
     const [customers, setCustomers] = useState<Customer[]>(CustomersData);
 
     const [searchedCustomers, setSearchedCustomers] = useState<Customer[]>(customers);
@@ -81,6 +78,17 @@ const CustomerListMap: React.FC<SignOutProps> = ({signOutUser}) => {
       setSortOrder((prevOrder) => (prevOrder === 'asc' ? 'desc' : 'asc'));
     };
 
+    const handleButtonClick = (videoUrl:string) => {
+      // ボタンがクリックされたら、指定された要素を表示
+      setDisplayedElement(true);
+      setUrl(videoUrl);
+    };
+
+    const handleHideButtonClick = () => {
+      // 非表示ボタンがクリックされたら、要素を非表示にする
+      setDisplayedElement(false);
+    };
+
     const ArrowImage: React.FC<SortIconProps> = ({isHovered, handleSort}) => (
       isHovered ? (
       <div onClick={handleSort} style={{position: 'absolute', right:0,top: '50%', transform: 'translateY(-50%)'}}>
@@ -97,7 +105,7 @@ const CustomerListMap: React.FC<SignOutProps> = ({signOutUser}) => {
     
       const indexOfLastCustomer = currentPage * itemsPerPage;
       const indexOfFirstCustomer = indexOfLastCustomer - itemsPerPage;
-      const currentItems = data.slice(indexOfFirstCustomer, indexOfLastCustomer);
+      const displayedCustomers = data.slice(indexOfFirstCustomer, indexOfLastCustomer);
     
       const lastPage = Math.ceil(data.length / itemsPerPage);
 
@@ -120,7 +128,6 @@ const CustomerListMap: React.FC<SignOutProps> = ({signOutUser}) => {
           value={searchTerm}
           onChange={handleSearchChange}
           maxLength={50} 
-          style={{ fontSize:'20px', padding:'20px'}}
         >
         </SearchTextField>
 
@@ -176,41 +183,77 @@ const CustomerListMap: React.FC<SignOutProps> = ({signOutUser}) => {
           </thead>
 
           <tbody>
-            {currentItems.map((row,index) => (
+            {displayedCustomers.map((row,index) => (
               <TableRow key={index}>
-                <TableData onClick={() => handleUserClick(row.name)}>{row.name}</TableData>
+                <TableData>{row.name}</TableData>
                 <TableData>{row.carNumber}</TableData>
                 <TableData>{row.inspectionExpiryDate}</TableData>
                 <TableData>{row.currentCar} / {row.proposedCar}</TableData>
-                <TableData><IconButton><QrCodeIcon /></IconButton>
-                <a href={row.videoUrl}>{row.videoUrl}</a></TableData>
+                <TableData>
+                  <UrlContainer>
+                    <CustomQrCodeIcon onClick={() => handleButtonClick(row.videoUrl)} />
+                    <a href={row.videoUrl}>{row.videoUrl}</a>
+                  </UrlContainer>
+                </TableData>
                 <TableData>{row.updateDate}</TableData>
                 <TableData>
-                  <IconButton><AccountCircleIcon /></IconButton>
-                  <IconButton><EditIcon /></IconButton>
+                    <Link to={`/customer/${row.name}`}>
+                      <CustomAccountCircle />
+                    </Link>
+                  <CustomEditIcon />
                 </TableData>
               </TableRow>
             ))}
           </tbody>
         </Table>
       </TableWrapper>
-      <Pagination 
-        currentPage={currentPage} 
-        totalPages={lastPage} 
-        onPageChange={handlePageChange}
-      />
-      <ButtonBox>
-        <SignOutButton onClick={signOutUser}>ログアウト</SignOutButton>
-      </ButtonBox>
-      {/* <SearchTutorial/> */}
+        <Pagination 
+          currentPage={currentPage} 
+          totalPages={lastPage} 
+          onPageChange={handlePageChange}
+        />
+        <ButtonBox>
+          <SignOutButton onClick={signOutUser}>ログアウト</SignOutButton>
+        </ButtonBox>
+        {/* <SearchTutorial/> */}
+
+        {displayedElement && (
+          <QrCode handleHideButtonClick={handleHideButtonClick} 
+            url={url} 
+            size={450}
+            />
+        )}
+        
+        
     </Root>
   
   );
 };
 
+const CustomAccountCircle = styled(AccountCircleIcon)({
+  marginLeft:'10px',
+})
+
+const CustomEditIcon = styled(EditIcon)({
+  marginLeft:'20px',
+  color:'gray'
+})
+
+const CustomQrCodeIcon = styled(QrCodeIcon)({
+  marginLeft:'10px',
+  cursor:'pointer',
+  color:'gray'
+})
+
+const UrlContainer = styled.div`
+  display: flex;
+  align-items:center;
+`
 
 const Root = styled.div`
   padding:20px;
+  max-width: 1600px;
+  margin: auto;
 `
 const PageTitle = styled.h1`
 `
@@ -228,6 +271,8 @@ const SearchTextField = styled.input`
   width: 100%;
   border: none;
   outline: none;
+  font-size:20px;
+  padding:20px;
 `
 const SearchButton = styled.button`
   position: relative;
@@ -259,8 +304,8 @@ const TableWrapper = styled.div`
   height: 280px;
 `
 const Table = styled.table`
-  margin-top: 45px;
   width:1410px;
+  margin: 45px auto;
   border-collapse:collapse;
 `
 const TableRow = styled.tr`

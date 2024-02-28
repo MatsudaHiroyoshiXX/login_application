@@ -27,11 +27,17 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
 
   const renderPageNumbers = () => {
     const pageNumbers: React.ReactNode[] = [];
-    Array.from({ length: totalPages }).forEach((_, i) => {
-      const pageNumber =  i + 1;
-      const maxPage = Math.min(totalPages, currentPage + 6);
-      // // pageNumber !== totalPages || 
-      // currentPage > pageNumber || pageNumber <= maxPage &&
+    const allayTotalPages = totalPages -1
+    Array.from({ length: allayTotalPages }).forEach((_, i) => {
+      const pageNumber = i + 1;
+      const minPage = Math.max(1, currentPage - 3);
+      const maxPage = Math.min(allayTotalPages, currentPage + 3);
+
+      if (
+        (currentPage <= 3 && pageNumber <= 7) || // currentPageが3以下の時にも7件表示
+        (currentPage >= totalPages - 3 && pageNumber >= totalPages - 7) || // currentPageがtotalPagesから数えて3件未満の時にも7件表示
+        (pageNumber >= minPage && pageNumber <= maxPage) 
+      ) {
         pageNumbers.push(
           <PageButton
             key={pageNumber}
@@ -41,6 +47,7 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
             {pageNumber}
           </PageButton>
         );
+      }
     });
     return pageNumbers;
   };
@@ -60,7 +67,7 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
           )}
           {renderPageNumbers()}
           <Dot>...</Dot>
-          <LastPageButton onClick={() => handlePageChange(totalPages)}>
+          <LastPageButton isActive={currentPage === totalPages} onClick={() => handlePageChange(totalPages)}>
             {totalPages}
           </LastPageButton>
           {currentPage !== totalPages ? (
@@ -130,16 +137,16 @@ const Dot = styled.div`
   margin: 10px 30px;
   color: grey;
 `
-const LastPageButton = styled.button`
+const LastPageButton = styled.button<{isActive:boolean}>`
   width: 70px;
   height: 40px;
-  color: blue;
-  background-color: white;
+  color: ${(props) => (props.isActive ? 'white' : 'blue')};
+  background-color: ${(props) => (props.isActive ? 'blue' : 'white')};
   border: 1px solid blue;
   border-radius:5px;
   cursor: pointer;
   &:hover{
-    background-color: #f3e5f5;
+    background-color: ${(props) => (props.isActive ? 'blue' : '#f3e5f5')};
   }
   &:active{
     background-color: blue;

@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { useParams } from 'react-router-dom';
 
 
 const CustomerPage = () => {
+  const { name } = useParams();
   const [buttonText, setButtonText] = useState('編集');
   const toggleButton = () => {
     setButtonText((prevText) => (prevText === '編集' ? '保存' : '編集'));
@@ -23,7 +25,7 @@ const CustomerPage = () => {
           <Content>
 
             <ProfileContent>
-              <UserName>田中 太郎（タナカ タロウ）</UserName>
+              <UserName>{name}（フリガナ）</UserName>
               <UserAge>30歳（2000年1月1日）</UserAge>
             </ProfileContent>
 
