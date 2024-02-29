@@ -18,12 +18,10 @@ const CustomerPage = () => {
         <PageTitle>お客様詳細情報</PageTitle>
         <ProfileContainer>
           <Content>
-
             <ProfileContent>
               <UserName>{customer?.name}（{customer?.name_kana}）</UserName>
               <UserAge>{customer?.age}歳（{customer?.birth_date}）</UserAge>
             </ProfileContent>
-
             <ProfileList>
               <ProfileItem>
                 <ItemTitle>種別ID：</ItemTitle>
@@ -38,7 +36,6 @@ const CustomerPage = () => {
                 <ItemValue>山田 一郎</ItemValue>
               </ProfileItem>
             </ProfileList>
-
             <ProfileInformation>連絡先情報</ProfileInformation>
             <ProfileContact>
               <ContactTitle>TEL：</ContactTitle>
@@ -48,7 +45,6 @@ const CustomerPage = () => {
               <ContactTitle>MAIL：</ContactTitle>
               <ContactValue>{customer?.email}</ContactValue>
             </ProfileContact>
-
           </Content>
         </ProfileContainer>
 
@@ -56,9 +52,7 @@ const CustomerPage = () => {
           <StatusLeft>
             <TitleText>ステータス情報</TitleText>
             <Content>
-
               <ContentMain>
-
                 <ContentLeft>
                   <StatusList>
                     <StatusItem>車両ナンバー</StatusItem>
@@ -77,7 +71,6 @@ const CustomerPage = () => {
                     <StatusValue>{customer?.update_date}</StatusValue>
                   </StatusList>
                 </ContentLeft>
-
                 <ImageContainer>
                   <CarImage src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSzQj1-py7Ahq39pc6noFkZqHLCulQIoSgNzA&usqp=CAU" />
                   <UrlList>
@@ -85,19 +78,15 @@ const CustomerPage = () => {
                     <UrlValue href={customer?.movie_url}>{customer?.movie_url}</UrlValue>
                   </UrlList>
                 </ImageContainer>
-
               </ContentMain>
-
               <ProfileInformation>お客様メモ</ProfileInformation>
               <TextBox>{customer?.user_memo}</TextBox>
-
             </Content>
           </StatusLeft>
 
           <StatusRight>
           <TitleText>通知{customer?.notification.flag}</TitleText>
-            <MessageContent>
-
+            <MessageContent>\
               <MessageBox>
                 <MessageList>
                   <MessageItem>{customer?.notification.message}</MessageItem>
@@ -112,7 +101,6 @@ const CustomerPage = () => {
                   <MessageValue></MessageValue>
                 </MessageList>
               </MessageBox>
-
             </MessageContent>
           </StatusRight>
         </StatusContainer>
@@ -120,7 +108,6 @@ const CustomerPage = () => {
         <HistoryContainer>
         <TitleText>購入履歴・経歴</TitleText>
           <Content>
-
             <HistoryTable>
               <thead>
                 <TableRow>
@@ -147,10 +134,8 @@ const CustomerPage = () => {
                 ))}
               </tbody>
             </HistoryTable>
-
           </Content>
         </HistoryContainer>
-
     </Root>
   );
 };
