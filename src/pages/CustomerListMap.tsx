@@ -23,13 +23,7 @@ interface SortIconProps {
 
 interface Customer {
   name: string;
-  name_kana: string;
-
-  birth_date: string;
   id: string;
-
-  tel: string;
-  email: string;
   carNumber: string;
   expiration_date: string;
   transfer_proposal: {
@@ -38,7 +32,6 @@ interface Customer {
   };
   update_date: string;
   movie_url: string;
-  user_memo: string;
 }
 
 const CustomerListMap: React.FC<SignOutProps> = ({signOutUser}) => {
@@ -73,18 +66,34 @@ const CustomerListMap: React.FC<SignOutProps> = ({signOutUser}) => {
     }
 
     const handleSort = (sortBy: keyof Customer) => {
+      // ソート対象のプロパティが正しいか確認する
+      if (!(sortBy in searchedCustomers[0])) {
+        console.error(`Invalid sortBy property: ${sortBy}`);
+        return;
+      }
+    
       const sortedCustomers = [...searchedCustomers].sort((a,b)=> {
-        const propA = a.transfer_proposal.transfer_proposal_before;
-        const propB = b.transfer_proposal.transfer_proposal_before;
+        const propA = getSortValue(a, sortBy);
+        const propB = getSortValue(b, sortBy);
         if (sortOrder === 'asc') {
           return propA.localeCompare(propB,'ja-JP');
         } else {
           return propB.localeCompare(propA,'ja-JP');
         }
       });
-
+    
       setSearchedCustomers(sortedCustomers);
       setSortOrder((prevOrder) => (prevOrder === 'asc' ? 'desc' : 'asc'));
+    };
+    
+    // ソート対象の値を取得するヘルパー関数
+    const getSortValue = (customer: Customer, sortBy: keyof Customer): string => {
+      // sortByがtransfer_proposalの場合、その中の特定のプロパティを取得する
+      if (sortBy === 'transfer_proposal') {
+        return customer.transfer_proposal.transfer_proposal_before;
+      }
+      // その他の場合、Customerの直接のプロパティを取得する
+      return customer[sortBy];
     };
 
     const handleButtonClick = (videoUrl:string) => {
@@ -206,7 +215,7 @@ const CustomerListMap: React.FC<SignOutProps> = ({signOutUser}) => {
                 </TableData>
                 <TableData>{row.update_date}</TableData>
                 <TableData>
-                    <Link to={`/customer/${row.name}`}>
+                    <Link to={`/customer/${row.id}`}>
                       <CustomAccountCircle />
                     </Link>
                   <CustomEditIcon />

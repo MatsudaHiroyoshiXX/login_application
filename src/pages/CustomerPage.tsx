@@ -5,8 +5,8 @@ import CustomersData, { Customers } from '../data/CustomersData';
 
 
 const CustomerPage = () => {
-  const { name } = useParams();
-  const customer = CustomersData.find(customer => customer.name === name);
+  const { id } = useParams();
+  const customer = CustomersData.find(customer => customer.id === id);
   console.log(customer)
   const [buttonText, setButtonText] = useState('編集');
   const toggleButton = () => {
@@ -28,7 +28,7 @@ const CustomerPage = () => {
           <Content>
 
             <ProfileContent>
-              <UserName>{name}（フリガナ）</UserName>
+              <UserName>{customer?.name}（{customer?.name_kana}）</UserName>
               <UserAge>30歳（2000年1月1日）</UserAge>
             </ProfileContent>
 

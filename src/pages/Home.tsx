@@ -66,7 +66,7 @@ function Home() {
             }
           />
           <Route 
-          path='/customer/:name'
+          path='/customer/:id'
           element={<CustomerPage/>}
           />
         </Routes>
