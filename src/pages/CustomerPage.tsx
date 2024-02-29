@@ -86,7 +86,7 @@ const CustomerPage = () => {
 
           <StatusRight>
           <TitleText>通知{customer?.notification.flag}</TitleText>
-            <MessageContent>\
+            <MessageContent>
               <MessageBox>
                 <MessageList>
                   <MessageItem>{customer?.notification.message}</MessageItem>
