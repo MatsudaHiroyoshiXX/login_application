@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useParams } from 'react-router-dom';
-import CustomersData, { Customers } from '../data/CustomersData';
+import CustomersData from '../data/CustomersData';
 
 
 const CustomerPage = () => {
@@ -13,14 +13,6 @@ const CustomerPage = () => {
     setButtonText((prevText) => (prevText === '編集' ? '保存' : '編集'));
   };
 
-  const tableData = [
-    { no: 1, number: 12345, date: '2023/2/15', situ: '注文済み', set: 'クレジットカード', total: '160,000円', ope: '詳細 / ', },
-    { no: 2, number: 67890, date: '2023/5/17', situ: '注文済み', set: '現金', total: '150,000円', ope: '詳細 / ', },
-    { no: 3, number: 37689, date: '2023/7/30', situ: '注文済み', set: 'クレジットカード', total: '250,000円', ope: '詳細 / ', },
-    { no: 4, number: 49687, date: '2023/10/26', situ: '注文済み', set: 'クレジットカード', total: '180,000円', ope: '詳細 / ', },
-    { no: 5, number: 19475, date: '2023/12/12', situ: '注文済み', set: '現金', total: '75,000円', ope: '詳細 / ', },
-  ];
-
   return (
     <Root>
         <PageTitle>お客様詳細情報</PageTitle>
@@ -29,17 +21,17 @@ const CustomerPage = () => {
 
             <ProfileContent>
               <UserName>{customer?.name}（{customer?.name_kana}）</UserName>
-              <UserAge>30歳（2000年1月1日）</UserAge>
+              <UserAge>{customer?.age}歳（{customer?.birth_date}）</UserAge>
             </ProfileContent>
 
             <ProfileList>
               <ProfileItem>
                 <ItemTitle>種別ID：</ItemTitle>
-                <ItemValue>aa123bb456</ItemValue>
+                <ItemValue>{customer?.id}</ItemValue>
               </ProfileItem>
               <ProfileItem>
                 <ItemTitle>お客様番号：</ItemTitle>
-                <ItemValue>1234567890</ItemValue>
+                <ItemValue>{customer?.user_number}</ItemValue>
               </ProfileItem>
               <ProfileItem>
                 <ItemTitle>担当者：</ItemTitle>
@@ -50,11 +42,11 @@ const CustomerPage = () => {
             <ProfileInformation>連絡先情報</ProfileInformation>
             <ProfileContact>
               <ContactTitle>TEL：</ContactTitle>
-              <ContactValue>090-XXXX-XXXX</ContactValue>
+              <ContactValue>{customer?.tel}</ContactValue>
             </ProfileContact>
             <ProfileContact>
               <ContactTitle>MAIL：</ContactTitle>
-              <ContactValue>sample@sample.com</ContactValue>
+              <ContactValue>{customer?.email}</ContactValue>
             </ProfileContact>
 
           </Content>
@@ -70,19 +62,19 @@ const CustomerPage = () => {
                 <ContentLeft>
                   <StatusList>
                     <StatusItem>車両ナンバー</StatusItem>
-                    <StatusValue>XX12345</StatusValue>
+                    <StatusValue>{customer?.carNumber}</StatusValue>
                   </StatusList>
                   <StatusList>
                     <StatusItem>車検満了日</StatusItem>
-                    <StatusValue>2000/12/12</StatusValue>
+                    <StatusValue>{customer?.expiration_date}</StatusValue>
                   </StatusList>
                   <StatusList>
                     <StatusItem>乗り換え提案</StatusItem>
-                    <StatusValue>日産 / トヨタ</StatusValue>
+                    <StatusValue>{customer?.transfer_proposal.transfer_proposal_before} / {customer?.transfer_proposal.transfer_proposal_after}</StatusValue>
                   </StatusList>
                   <StatusList>
                     <StatusItem>更新日</StatusItem>
-                    <StatusValue>2022/12/12</StatusValue>
+                    <StatusValue>{customer?.update_date}</StatusValue>
                   </StatusList>
                 </ContentLeft>
 
@@ -90,38 +82,38 @@ const CustomerPage = () => {
                   <CarImage src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSzQj1-py7Ahq39pc6noFkZqHLCulQIoSgNzA&usqp=CAU" />
                   <UrlList>
                     <UrlItem>動画URL：</UrlItem>
-                    <UrlValue>https://xxxxxxxxxxxxxxxxxx.com</UrlValue>
+                    <UrlValue href={customer?.movie_url}>{customer?.movie_url}</UrlValue>
                   </UrlList>
                 </ImageContainer>
 
               </ContentMain>
 
               <ProfileInformation>お客様メモ</ProfileInformation>
-              <TextBox>テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト</TextBox>
+              <TextBox>{customer?.user_memo}</TextBox>
 
             </Content>
           </StatusLeft>
 
           <StatusRight>
-          <TitleText>通知</TitleText>
-            <Content>
+          <TitleText>通知{customer?.notification.flag}</TitleText>
+            <MessageContent>
 
               <MessageBox>
                 <MessageList>
-                  <MessageItem>新着メッセージ・・・・・・・・・・・</MessageItem>
+                  <MessageItem>{customer?.notification.message}</MessageItem>
                   <MessageValue></MessageValue>
                 </MessageList>
                 <MessageList>
-                  <MessageItem>新着メッセージ・・・・・・・・・・・</MessageItem>
+                  <MessageItem>{customer?.notification.message}</MessageItem>
                   <MessageValue></MessageValue>
                 </MessageList>
                 <MessageList>
-                  <MessageItem>新着メッセージ・・・・・・・・・・・</MessageItem>
+                  <MessageItem>{customer?.notification.message}</MessageItem>
                   <MessageValue></MessageValue>
                 </MessageList>
               </MessageBox>
 
-            </Content>
+            </MessageContent>
           </StatusRight>
         </StatusContainer>
 
@@ -142,15 +134,15 @@ const CustomerPage = () => {
                 </TableRow>
               </thead>
               <tbody>
-                {tableData.map((row) => (
-                <TableRow key={row.no}>
-                  <TableData>{row.no}</TableData>
+                {customer?.purchase_history.map((row,index) => (
+                <TableRow key={row.number}>
                   <TableData>{row.number}</TableData>
-                  <TableData>{row.date}</TableData>
-                  <TableData>{row.situ}</TableData>
-                  <TableData>{row.set}</TableData>
-                  <TableData>{row.total}</TableData>
-                  <TableData>{row.ope} <button onClick={toggleButton}>{buttonText}</button></TableData>
+                  <TableData>{row.order_number}</TableData>
+                  <TableData>{row.order_date}</TableData>
+                  <TableData>{row.status}</TableData>
+                  <TableData>{row.payment}</TableData>
+                  <TableData>{row.total_amount}円</TableData>
+                  <TableData>詳細 / <button onClick={toggleButton}>{buttonText}</button></TableData>
                 </TableRow>
                 ))}
               </tbody>
@@ -279,8 +271,15 @@ const TextBox = styled.div`
 `
 
 const StatusRight = styled.div`
-  height:auto;
   `
+  
+const MessageContent = styled.div`
+  height: 468px;
+  background-color:#ffffff;
+  border-radius: 7px;
+  padding: 25px;
+`
+
 const MessageBox = styled.div`
   background-color:#DEDEDE;
   margin:0px 0px 321px 0px;
